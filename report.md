@@ -3,7 +3,7 @@
 # Assignment 1
 
 Giangiulli Chiara (todo; todo@studio.unibo.it)  
-Shtini Dilaver (1189997; dilaver.shtini@studio.unibo.it)  
+Shtini Dilaver (todo; todo@studio.unibo.it)  
 Terenzi Mirco (todo; todo@studio.unibo.it)  
 10 Aprile 2025
 
