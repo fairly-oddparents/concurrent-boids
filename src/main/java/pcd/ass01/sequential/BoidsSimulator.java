@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public class BoidsSimulator {
 
-    private BoidsModel model;
+    private final BoidsModel model;
     private Optional<BoidsView> view;
     
     private static final int FRAMERATE = 25;
@@ -53,7 +53,7 @@ public class BoidsSimulator {
                 if (dtElapsed < framratePeriod) {		
                 	try {
                 		Thread.sleep(framratePeriod - dtElapsed);
-                	} catch (Exception ex) {}
+                	} catch (Exception ignored) {}
                 	framerate = FRAMERATE;
                 } else {
                 	framerate = (int) (1000/dtElapsed);

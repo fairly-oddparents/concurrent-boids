@@ -9,12 +9,12 @@ import java.util.Hashtable;
 
 public class BoidsView implements ChangeListener {
 
-	private JFrame frame;
-	private BoidsPanel boidsPanel;
-	private JButton stopButton, pauseResumeButton;
-	private JSlider cohesionSlider, separationSlider, alignmentSlider;
-	private BoidsModel model;
-	private int width, height;
+	private final JFrame frame;
+	private final BoidsPanel boidsPanel;
+    private final JButton pauseResumeButton;
+	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
+	private final BoidsModel model;
+	private final int width, height;
 	private boolean isPause;
 	
 	public BoidsView(BoidsModel model, int width, int height) {
@@ -37,7 +37,7 @@ public class BoidsView implements ChangeListener {
 
         JPanel slidersPanel = new JPanel();
 
-        stopButton = new JButton("Stop");
+        JButton stopButton = new JButton("Stop");
         stopButton.addActionListener(e -> {
             //TODO: stop simulation
         });
@@ -84,7 +84,7 @@ public class BoidsView implements ChangeListener {
 		slider.setMinorTickSpacing(1);
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
-		Hashtable labelTable = new Hashtable<>();
+		Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
 		labelTable.put( 0, new JLabel("0") );
 		labelTable.put( 10, new JLabel("1") );
 		labelTable.put( 20, new JLabel("2") );
