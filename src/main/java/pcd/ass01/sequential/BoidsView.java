@@ -26,34 +26,40 @@ public class BoidsView implements ChangeListener {
 		frame = new JFrame("Boids Simulation");
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		frame.setResizable(true);
 
 		JPanel cp = new JPanel();
 		LayoutManager layout = new BorderLayout();
 		cp.setLayout(layout);
+
+		JPanel buttonsPanel = new JPanel();
+
+		JButton stopButton = new JButton("Stop");
+		stopButton.addActionListener(e -> {
+			this.model.clearBoids();
+			this.model.setNumberBoids(inputDialog());
+		});
+		pauseResumeButton = new JButton("Pause");
+		pauseResumeButton.addActionListener(e -> {
+			this.isPause = !this.isPause;
+			pauseResumeButton.setText(this.isPause ? "Resume" : "Pause");
+			//TODO: pause/resume simulation
+		});
+
+		buttonsPanel.add(stopButton);
+		buttonsPanel.add(pauseResumeButton);
+
+		cp.add(BorderLayout.NORTH, buttonsPanel);
 
         boidsPanel = new BoidsPanel(this, model);
 		cp.add(BorderLayout.CENTER, boidsPanel);
 
         JPanel slidersPanel = new JPanel();
 
-        JButton stopButton = new JButton("Stop");
-        stopButton.addActionListener(e -> {
-			this.model.clearBoids();
-            this.model.setNumberBoids(inputDialog());
-        });
-        pauseResumeButton = new JButton("Pause");
-        pauseResumeButton.addActionListener(e -> {
-            this.isPause = !this.isPause;
-            pauseResumeButton.setText(this.isPause ? "Resume" : "Pause");
-            //TODO: pause/resume simulation
-        });
         cohesionSlider = makeSlider();
         separationSlider = makeSlider();
         alignmentSlider = makeSlider();
 
-        slidersPanel.add(stopButton);
-        slidersPanel.add(pauseResumeButton);
         slidersPanel.add(new JLabel("Separation"));
         slidersPanel.add(separationSlider);
         slidersPanel.add(new JLabel("Alignment"));
@@ -61,7 +67,7 @@ public class BoidsView implements ChangeListener {
         slidersPanel.add(new JLabel("Cohesion"));
         slidersPanel.add(cohesionSlider);
 
-        cp.add(BorderLayout.SOUTH, slidersPanel);
+		cp.add(BorderLayout.SOUTH, slidersPanel);
 
         frame.setContentPane(cp);
 
