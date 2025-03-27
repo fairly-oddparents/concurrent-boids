@@ -26,6 +26,7 @@ public class BoidsView implements ChangeListener {
 		frame = new JFrame("Boids Simulation");
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 
 		JPanel cp = new JPanel();
 		LayoutManager layout = new BorderLayout();
