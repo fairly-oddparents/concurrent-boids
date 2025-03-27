@@ -108,8 +108,12 @@ public class BoidsModel {
     	return perceptionRadius;
     }
 
-    public synchronized void setNumberBoids(int amount) {
+    public synchronized void clearBoids() {
         this.boids.clear();
+    }
+
+    public synchronized void setNumberBoids(int amount) {
+        this.clearBoids();
         this.createBoids(amount);
     }
 }
