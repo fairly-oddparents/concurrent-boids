@@ -69,13 +69,13 @@ public class BoidsView implements ChangeListener {
 		inputDialog();	//TODO: use input to set the number of boids
     }
 
-	private String inputDialog() {
-		return JOptionPane.showInputDialog(	//TODO: check that input isn't null
+	private Integer inputDialog() {
+		return Integer.parseInt(JOptionPane.showInputDialog(
 				frame,
 				"Insert number of voids:",
 				"Input",
 				JOptionPane.QUESTION_MESSAGE
-		);
+		));
 	}
 
 	private JSlider makeSlider() {
