@@ -75,12 +75,20 @@ public class BoidsView implements ChangeListener {
     }
 
 	public Integer inputDialog() {
-		return Integer.parseInt(JOptionPane.showInputDialog(
-				frame,
-				"Insert number of voids:",
-				"Input",
-				JOptionPane.QUESTION_MESSAGE
-		));
+		String input;
+		do {
+			input = JOptionPane.showInputDialog(
+					this.frame,
+					"Insert number of voids:",
+					"Input",
+					JOptionPane.QUESTION_MESSAGE
+			);
+			if (input == null) {	// Handles the "cancel" button
+				this.frame.dispose();
+				System.exit(0);
+			}
+		} while (input.isEmpty());
+		return Integer.parseInt(input);
 	}
 
 	private JSlider makeSlider() {
