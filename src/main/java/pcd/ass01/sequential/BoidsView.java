@@ -65,11 +65,9 @@ public class BoidsView implements ChangeListener {
         frame.setContentPane(cp);
 
         frame.setVisible(true);
-
-		inputDialog();	//TODO: use input to set the number of boids
     }
 
-	private Integer inputDialog() {
+	public Integer inputDialog() {
 		return Integer.parseInt(JOptionPane.showInputDialog(
 				frame,
 				"Insert number of voids:",

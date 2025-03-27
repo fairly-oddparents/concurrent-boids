@@ -2,7 +2,7 @@ package pcd.ass01.sequential;
 
 public class BoidsSimulation {
 
-	final static int N_BOIDS = 1500;
+	final static int N_BOIDS = 0;
 
 	final static double SEPARATION_WEIGHT = 1.0;
     final static double ALIGNMENT_WEIGHT = 1.0;
@@ -28,6 +28,7 @@ public class BoidsSimulation {
     					AVOID_RADIUS); 
     	var sim = new BoidsSimulator(model);
     	var view = new BoidsView(model, SCREEN_WIDTH, SCREEN_HEIGHT);
+		model.setNumberBoids(view.inputDialog());
     	sim.attachView(view);
     	sim.runSimulation();
     }

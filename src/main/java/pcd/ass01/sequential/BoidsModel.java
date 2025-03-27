@@ -24,22 +24,24 @@ public class BoidsModel {
     						double maxSpeed,
     						double perceptionRadius,
     						double avoidRadius){
-        separationWeight = initialSeparationWeight;
-        alignmentWeight = initialAlignmentWeight;
-        cohesionWeight = initialCohesionWeight;
+        this.separationWeight = initialSeparationWeight;
+        this.alignmentWeight = initialAlignmentWeight;
+        this.cohesionWeight = initialCohesionWeight;
         this.width = width;
         this.height = height;
         this.maxSpeed = maxSpeed;
         this.perceptionRadius = perceptionRadius;
         this.avoidRadius = avoidRadius;
-        
-    	boids = new ArrayList<>();
-        for (int i = 0; i < nboids; i++) {
-        	P2d pos = new P2d(-width/2 + Math.random() * width, -height/2 + Math.random() * height);
-        	V2d vel = new V2d(Math.random() * maxSpeed/2 - maxSpeed/4, Math.random() * maxSpeed/2 - maxSpeed/4);
-        	boids.add(new Boid(pos, vel));
-        }
+        this.boids = new ArrayList<>();
+        this.createBoids(nboids);
+    }
 
+    private synchronized void createBoids(int amount) {
+        for (int i = 0; i < amount; i++) {
+            P2d pos = new P2d(-width/2 + Math.random() * width, -height/2 + Math.random() * height);
+            V2d vel = new V2d(Math.random() * maxSpeed/2 - maxSpeed/4, Math.random() * maxSpeed/2 - maxSpeed/4);
+            boids.add(new Boid(pos, vel));
+        }
     }
     
     public synchronized List<Boid> getBoids(){
@@ -104,5 +106,10 @@ public class BoidsModel {
 
     public synchronized double getPerceptionRadius() {
     	return perceptionRadius;
+    }
+
+    public synchronized void setNumberBoids(int amount) {
+        this.boids.clear();
+        this.createBoids(amount);
     }
 }
