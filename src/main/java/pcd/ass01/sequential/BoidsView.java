@@ -11,15 +11,18 @@ public class BoidsView implements ChangeListener {
 
 	private JFrame frame;
 	private BoidsPanel boidsPanel;
+	private JButton stopButton, pauseResumeButton;
 	private JSlider cohesionSlider, separationSlider, alignmentSlider;
 	private BoidsModel model;
 	private int width, height;
+	private boolean isPause;
 	
 	public BoidsView(BoidsModel model, int width, int height) {
 		this.model = model;
 		this.width = width;
 		this.height = height;
-		
+        this.isPause = false;
+
 		frame = new JFrame("Boids Simulation");
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,23 +35,46 @@ public class BoidsView implements ChangeListener {
 		cp.add(BorderLayout.CENTER, boidsPanel);
 
         JPanel slidersPanel = new JPanel();
-        
+
+        stopButton = new JButton("Stop");
+        stopButton.addActionListener(e -> {
+            //TODO: stop simulation
+        });
+        pauseResumeButton = new JButton("Pause");
+        pauseResumeButton.addActionListener(e -> {
+            this.isPause = !this.isPause;
+            pauseResumeButton.setText(this.isPause ? "Resume" : "Pause");
+            //TODO: pause/resume simulation
+        });
         cohesionSlider = makeSlider();
         separationSlider = makeSlider();
         alignmentSlider = makeSlider();
-        
+
+        slidersPanel.add(stopButton);
+        slidersPanel.add(pauseResumeButton);
         slidersPanel.add(new JLabel("Separation"));
         slidersPanel.add(separationSlider);
         slidersPanel.add(new JLabel("Alignment"));
         slidersPanel.add(alignmentSlider);
         slidersPanel.add(new JLabel("Cohesion"));
         slidersPanel.add(cohesionSlider);
-		        
-		cp.add(BorderLayout.SOUTH, slidersPanel);
 
-		frame.setContentPane(cp);	
-		
+        cp.add(BorderLayout.SOUTH, slidersPanel);
+
+        frame.setContentPane(cp);
+
         frame.setVisible(true);
+
+		inputDialog();	//TODO: use input to set the number of boids
+    }
+
+	private String inputDialog() {
+		return JOptionPane.showInputDialog(	//TODO: check that input isn't null
+				frame,
+				"Insert number of voids:",
+				"Input",
+				JOptionPane.QUESTION_MESSAGE
+		);
 	}
 
 	private JSlider makeSlider() {
