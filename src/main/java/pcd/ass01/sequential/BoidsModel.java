@@ -14,6 +14,7 @@ public class BoidsModel {
     private final double maxSpeed;
     private final double perceptionRadius;
     private final double avoidRadius;
+    private boolean isPaused;
 
     public BoidsModel(int nboids,  
     						double initialSeparationWeight, 
@@ -115,5 +116,13 @@ public class BoidsModel {
     public synchronized void setNumberBoids(int amount) {
         this.clearBoids();
         this.createBoids(amount);
+    }
+
+    public boolean isPaused() {
+        return this.isPaused;
+    }
+
+    public void setPaused(boolean isPaused) {
+        this.isPaused = isPaused;
     }
 }

@@ -15,13 +15,13 @@ public class BoidsView implements ChangeListener {
 	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
 	private final BoidsModel model;
 	private final int width, height;
-	private boolean isPause;
+	private boolean isPaused;
 	
 	public BoidsView(BoidsModel model, int width, int height) {
 		this.model = model;
 		this.width = width;
 		this.height = height;
-        this.isPause = false;
+        this.isPaused = false;
 
 		frame = new JFrame("Boids Simulation");
         frame.setSize(width, height);
@@ -41,9 +41,9 @@ public class BoidsView implements ChangeListener {
 		});
 		pauseResumeButton = new JButton("Pause");
 		pauseResumeButton.addActionListener(e -> {
-			this.isPause = !this.isPause;
-			pauseResumeButton.setText(this.isPause ? "Resume" : "Pause");
-			//TODO: pause/resume simulation
+			this.isPaused = !this.isPaused;
+			pauseResumeButton.setText(this.isPaused ? "Resume" : "Pause");
+			this.model.setPaused(this.isPaused);
 		});
 
 		buttonsPanel.add(stopButton);

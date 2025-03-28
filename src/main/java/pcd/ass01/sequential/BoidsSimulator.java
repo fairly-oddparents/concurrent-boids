@@ -23,27 +23,17 @@ public class BoidsSimulator {
     	while (true) {
             var t0 = System.currentTimeMillis();
     		var boids = model.getBoids();
-    		/*
-    		for (Boid boid : boids) {
-                boid.update(model);
-            }
-            */
-    		
-    		/* 
-    		 * Improved correctness: first update velocities...
-    		 */
-    		for (Boid boid : boids) {
-                boid.updateVelocity(model);
+
+            if (!model.isPaused()) {
+                for (Boid boid : boids) {
+                    boid.updateVelocity(model);
+                }
+
+                for (Boid boid : boids) {
+                    boid.updatePos(model);
+                }
             }
 
-    		/* 
-    		 * ..then update positions
-    		 */
-    		for (Boid boid : boids) {
-                boid.updatePos(model);
-            }
-
-            
     		if (view.isPresent()) {
             	view.get().update(framerate);
             	var t1 = System.currentTimeMillis();
