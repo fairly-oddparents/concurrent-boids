@@ -23,7 +23,6 @@ public class BoidsView implements ChangeListener {
 		this.model = model;
 		this.width = width;
 		this.height = height;
-        this.isPaused = false;
 
 		frame = new JFrame("Boids Simulation");
         frame.setSize(width, height);
@@ -38,15 +37,12 @@ public class BoidsView implements ChangeListener {
 
 		JButton stopButton = new JButton("Stop");
 		stopButton.addActionListener(e -> {
+			this.updatePauseResumeButton(false);
 			this.model.clearBoids();
 			this.model.setNumberBoids(inputDialog());
 		});
 		pauseResumeButton = new JButton("Pause");
-		pauseResumeButton.addActionListener(e -> {
-			this.isPaused = !this.isPaused;
-			pauseResumeButton.setText(this.isPaused ? "Resume" : "Pause");
-			this.model.setPaused(this.isPaused);
-		});
+		pauseResumeButton.addActionListener(e -> updatePauseResumeButton(!this.isPaused));
 
 		buttonsPanel.add(stopButton);
 		buttonsPanel.add(pauseResumeButton);
@@ -75,6 +71,12 @@ public class BoidsView implements ChangeListener {
 
         frame.setVisible(true);
     }
+
+	private void updatePauseResumeButton(boolean state) {
+		this.isPaused = state;
+		pauseResumeButton.setText(this.isPaused ? "Resume" : "Pause");
+		this.model.setPaused(this.isPaused);
+	}
 
 	public Integer inputDialog() {
 		String input;
