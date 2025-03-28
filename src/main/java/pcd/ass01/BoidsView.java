@@ -83,7 +83,7 @@ public class BoidsView implements ChangeListener {
 		do {
 			input = JOptionPane.showInputDialog(
 					this.frame,
-					"Insert number of voids:",
+					"Insert number of boids:",
 					"Input",
 					JOptionPane.QUESTION_MESSAGE
 			);
