@@ -1,5 +1,8 @@
 package pcd.ass01.sequential;
 
+import pcd.ass01.Boid;
+import pcd.ass01.BoidsView;
+
 import java.util.Optional;
 
 public class BoidsSimulator {

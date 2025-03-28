@@ -1,4 +1,6 @@
-package pcd.ass01.sequential;
+package pcd.ass01;
+
+import pcd.ass01.sequential.BoidsModel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

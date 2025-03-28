@@ -1,6 +1,8 @@
 package pcd.ass01.sequential;
 
-public class BoidsSimulation {
+import pcd.ass01.BoidsView;
+
+public class SequentialSimulation {
 
 	final static int N_BOIDS = 0;
 
@@ -15,8 +17,7 @@ public class BoidsSimulation {
     static final double AVOID_RADIUS = 20.0;
 
 	final static int SCREEN_WIDTH = 800; 
-	final static int SCREEN_HEIGHT = 800; 
-	
+	final static int SCREEN_HEIGHT = 800;
 
     public static void main(String[] args) {      
     	var model = new BoidsModel(

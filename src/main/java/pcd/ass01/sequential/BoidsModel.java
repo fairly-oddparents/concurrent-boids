@@ -1,5 +1,9 @@
 package pcd.ass01.sequential;
 
+import pcd.ass01.Boid;
+import pcd.ass01.P2d;
+import pcd.ass01.V2d;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +21,14 @@ public class BoidsModel {
     private boolean isPaused;
 
     public BoidsModel(int nboids,  
-    						double initialSeparationWeight, 
-    						double initialAlignmentWeight, 
-    						double initialCohesionWeight,
-    						double width, 
-    						double height,
-    						double maxSpeed,
-    						double perceptionRadius,
-    						double avoidRadius){
+                double initialSeparationWeight,
+                double initialAlignmentWeight,
+                double initialCohesionWeight,
+                double width,
+                double height,
+                double maxSpeed,
+                double perceptionRadius,
+                double avoidRadius) {
         this.separationWeight = initialSeparationWeight;
         this.alignmentWeight = initialAlignmentWeight;
         this.cohesionWeight = initialCohesionWeight;
