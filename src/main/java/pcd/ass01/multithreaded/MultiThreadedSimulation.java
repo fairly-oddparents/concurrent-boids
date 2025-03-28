@@ -1,7 +1,7 @@
 package pcd.ass01.multithreaded;
 
 import pcd.ass01.BoidsView;
-import pcd.ass01.sequential.BoidsModel;
+import pcd.ass01.api.BoidsModel;
 import pcd.ass01.sequential.BoidsSimulator;
 
 public class MultiThreadedSimulation {

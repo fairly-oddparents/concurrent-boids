@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public class BoidsSimulator {
 
-    private final BoidsModel model;
+    private final SequentialBoidsModel model;
     private Optional<BoidsView> view;
     
     private static final int FRAMERATE = 25;
     private int framerate;
     
-    public BoidsSimulator(BoidsModel model) {
+    public BoidsSimulator(SequentialBoidsModel model) {
         this.model = model;
         view = Optional.empty();
     }
