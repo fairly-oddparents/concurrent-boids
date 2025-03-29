@@ -1,12 +1,10 @@
 package pcd.ass01.multithreaded;
 
 import pcd.ass01.BoidsModel;
-import pcd.ass01.BoidsView;
 import pcd.ass01.BoidsSimulator;
 import pcd.ass01.multithreaded.api.Barrier;
 
 import java.util.LinkedList;
-import java.util.Optional;
 
 public class MultithreadedBoidsSimulator extends BoidsSimulator {
     private final LinkedList<Thread> threads = new LinkedList<>();
@@ -20,13 +18,11 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
         var nBoids = this.model.getBoids().size();
         Barrier barrier = new BarrierImpl(nBoids);
         for (int i = 0; i < nBoids; i++) {
-            threads.add(new BoidThread(this.model, barrier, this.model.getBoids().get(i)));
+            threads.add(new BoidThread(this, this.model, barrier, this.model.getBoids().get(i)));
         }
         threads.forEach(Thread::start);
-
     	while (true) {
             var t0 = System.currentTimeMillis();
-
             if (this.model.getBoids().isEmpty()) {
                 this.stopSimulation(); //TODO: e quando deve ripartire?
             }

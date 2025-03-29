@@ -9,11 +9,13 @@ public abstract class BoidsSimulator {
     private static final int FRAMERATE = 25;
     private Optional<BoidsView> view = Optional.empty();
     private int framerate;
+    private boolean isRunning;
 
     protected final BoidsModel model;
 
     public BoidsSimulator(BoidsModel model) {
         this.model = model;
+        this.isRunning = true;
     }
 
     /**
@@ -47,7 +49,30 @@ public abstract class BoidsSimulator {
     }
 
     /**
+     * Checks whether the simulation is running or not.
+     * @return true if the simulation is running, false otherwise
+     */
+    public synchronized boolean isRunning() {
+        return this.isRunning;
+    }
+
+    /**
      * Runs the simulation.
      */
     protected abstract void runSimulation();
+
+    /**
+     * Pauses the simulation.
+     */
+    protected synchronized void pauseSimulation() {
+        this.isRunning = false;
+    }
+
+    /**
+     * Resumes the simulation.
+     */
+    protected synchronized void resumeSimulation() {
+        this.isRunning = true;
+    }
+
 }

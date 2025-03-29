@@ -16,7 +16,7 @@ public class MultithreadedSimulation {
 				PERCEPTION_RADIUS,
 				AVOID_RADIUS);
 		var sim = new MultithreadedBoidsSimulator(model);
-		var view = new BoidsView(model, SCREEN_WIDTH, SCREEN_HEIGHT);
+		var view = new BoidsView(sim, model, SCREEN_WIDTH, SCREEN_HEIGHT);
 		model.setNumberBoids(view.inputDialog());
 		sim.attachView(view);
 		sim.runSimulation();
