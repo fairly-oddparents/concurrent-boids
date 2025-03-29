@@ -6,11 +6,11 @@ import pcd.ass01.multithreaded.api.Barrier;
 public class BoidThread extends Thread{
 
     private final Barrier barrier;
-    private final MultithreadedBoidsModel model;
+    private final BoidsModel model;
     private final Boid boid;
 
 
-    public BoidThread(MultithreadedBoidsModel model, Barrier barrier, Boid boid){
+    public BoidThread(BoidsModel model, Barrier barrier, Boid boid){
         this.barrier = barrier;
         this.model = model;
         this.boid = boid;

@@ -3,12 +3,11 @@ package pcd.ass01.multithreaded;
 import pcd.ass01.Boid;
 import pcd.ass01.P2d;
 import pcd.ass01.V2d;
-import pcd.ass01.api.BoidsModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultithreadedBoidsModel implements BoidsModel {
+public class BoidsModel implements pcd.ass01.api.BoidsModel {
 
     private final List<Boid> boids;
     private double separationWeight;
@@ -22,15 +21,15 @@ public class MultithreadedBoidsModel implements BoidsModel {
     private boolean isPaused;
     private int nBoids;
 
-    public MultithreadedBoidsModel(int nboids,
-                                double initialSeparationWeight,
-                                double initialAlignmentWeight,
-                                double initialCohesionWeight,
-                                double width,
-                                double height,
-                                double maxSpeed,
-                                double perceptionRadius,
-                                double avoidRadius) {
+    public BoidsModel(int nboids,
+                      double initialSeparationWeight,
+                      double initialAlignmentWeight,
+                      double initialCohesionWeight,
+                      double width,
+                      double height,
+                      double maxSpeed,
+                      double perceptionRadius,
+                      double avoidRadius) {
         this.separationWeight = initialSeparationWeight;
         this.alignmentWeight = initialAlignmentWeight;
         this.cohesionWeight = initialCohesionWeight;

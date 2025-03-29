@@ -8,14 +8,14 @@ import java.util.Optional;
 
 public class MultithreadedBoidsSimulator {
 
-    private final MultithreadedBoidsModel model;
+    private final BoidsModel model;
     private final LinkedList<Thread> threads = new LinkedList<>();
     private Optional<BoidsView> view = Optional.empty();
     private static final int FRAMERATE = 25;
     private int framerate;
 
 
-    public MultithreadedBoidsSimulator(MultithreadedBoidsModel model) {
+    public MultithreadedBoidsSimulator(BoidsModel model) {
         this.model = model;
     }
 

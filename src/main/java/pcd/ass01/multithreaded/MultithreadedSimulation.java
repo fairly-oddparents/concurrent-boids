@@ -20,7 +20,7 @@ public class MultithreadedSimulation {
 	final static int SCREEN_HEIGHT = 800;
 
 	public static void main(String[] args) {
-		var model = new MultithreadedBoidsModel(
+		var model = new BoidsModel(
 				N_BOIDS,
 				SEPARATION_WEIGHT, ALIGNMENT_WEIGHT, COHESION_WEIGHT,
 				ENVIRONMENT_WIDTH, ENVIRONMENT_HEIGHT,
