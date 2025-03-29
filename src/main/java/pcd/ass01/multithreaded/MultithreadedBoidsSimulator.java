@@ -2,28 +2,20 @@ package pcd.ass01.multithreaded;
 
 import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsView;
+import pcd.ass01.BoidsSimulator;
 import pcd.ass01.multithreaded.api.Barrier;
 
 import java.util.LinkedList;
 import java.util.Optional;
 
-public class BoidsSimulator {
-
-    private final BoidsModel model;
+public class MultithreadedBoidsSimulator extends BoidsSimulator {
     private final LinkedList<Thread> threads = new LinkedList<>();
-    private Optional<BoidsView> view = Optional.empty();
-    private static final int FRAMERATE = 25;
-    private int framerate;
 
-
-    public BoidsSimulator(BoidsModel model) {
-        this.model = model;
+    public MultithreadedBoidsSimulator(BoidsModel model) {
+        super(model);
     }
 
-    public void attachView(BoidsView view) {
-    	this.view = Optional.of(view);
-    }
-      
+    @Override
     public void runSimulation() {
         var nBoids = this.model.getBoids().size();
         Barrier barrier = new BarrierImpl(nBoids);
@@ -38,21 +30,7 @@ public class BoidsSimulator {
             if (this.model.getBoids().isEmpty()) {
                 this.stopSimulation(); //TODO: e quando deve ripartire?
             }
-    		if (view.isPresent()) {
-            	view.get().update(framerate);
-            	var t1 = System.currentTimeMillis();
-                var dtElapsed = t1 - t0;
-                var frameratePeriod = 1000/FRAMERATE;
-                
-                if (dtElapsed < frameratePeriod) {		
-                	try {
-                		Thread.sleep(frameratePeriod - dtElapsed);
-                	} catch (Exception ignored) {}
-                	framerate = FRAMERATE;
-                } else {
-                	framerate = (int) (1000/dtElapsed);
-                }
-    		}
+    		updateView(t0);
     	}
     }
 
