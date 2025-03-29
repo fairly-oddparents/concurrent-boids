@@ -10,10 +10,8 @@
 package pcd.ass01;
 
 /**
- *
  * 2-dimensional vector
  * objects are completely state-less
- *
  */
 public record V2d(double x,double y) {
 

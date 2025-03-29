@@ -9,17 +9,14 @@ import java.util.Optional;
 public class MultithreadedBoidsSimulator {
 
     private final MultithreadedBoidsModel model;
-    private final LinkedList<Thread> threads;
-    private Barrier barrier;
-    private Optional<BoidsView> view;
+    private final LinkedList<Thread> threads = new LinkedList<>();
+    private Optional<BoidsView> view = Optional.empty();
     private static final int FRAMERATE = 25;
     private int framerate;
 
 
     public MultithreadedBoidsSimulator(MultithreadedBoidsModel model) {
         this.model = model;
-        view = Optional.empty();
-        this.threads = new LinkedList<>();
     }
 
     public void attachView(BoidsView view) {
@@ -27,30 +24,15 @@ public class MultithreadedBoidsSimulator {
     }
       
     public void runSimulation() {
-
         var nBoids = this.model.getNBoids();
-        this.barrier = new BarrierImpl(nBoids);
+        Barrier barrier = new BarrierImpl(nBoids);
         for (int i = 0; i < nBoids; i++) {
-            threads.add(new BoidThread(this.model, this.barrier, this.model.getBoids().get(i)));
+            threads.add(new BoidThread(this.model, barrier, this.model.getBoids().get(i)));
         }
-        for (Thread thread : threads) {
-            thread.start();
-        }
+        threads.forEach(Thread::start);
 
     	while (true) {
             var t0 = System.currentTimeMillis();
-
-            /*
-            if (!model.isPaused()) {
-                for (Boid boid : boids) {
-                    boid.updateVelocity(model);
-                }
-
-                for (Boid boid : boids) {
-                    boid.updatePos(model);
-                }
-            }
-            */
 
             if(model.getNBoids() == 0) {
                 this.stopSimulation(); //TODO: e quando deve ripartire?
@@ -71,7 +53,6 @@ public class MultithreadedBoidsSimulator {
                 	framerate = (int) (1000/dtElapsed);
                 }
     		}
-            
     	}
     }
 

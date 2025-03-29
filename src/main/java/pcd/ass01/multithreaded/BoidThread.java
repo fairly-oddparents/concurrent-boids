@@ -15,6 +15,7 @@ public class BoidThread extends Thread{
         this.model = model;
         this.boid = boid;
     }
+
     @Override
     public void run() {
         while(true){
