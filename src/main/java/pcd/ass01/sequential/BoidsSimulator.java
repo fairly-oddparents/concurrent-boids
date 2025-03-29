@@ -2,18 +2,19 @@ package pcd.ass01.sequential;
 
 import pcd.ass01.Boid;
 import pcd.ass01.BoidsView;
+import pcd.ass01.BoidsModel;
 
 import java.util.Optional;
 
 public class BoidsSimulator {
 
-    private final SequentialBoidsModel model;
+    private final BoidsModel model;
     private Optional<BoidsView> view;
     
     private static final int FRAMERATE = 25;
     private int framerate;
     
-    public BoidsSimulator(SequentialBoidsModel model) {
+    public BoidsSimulator(BoidsModel model) {
         this.model = model;
         view = Optional.empty();
     }
