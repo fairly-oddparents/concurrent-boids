@@ -18,19 +18,28 @@ public class BoidThread extends Thread{
 
     @Override
     public void run() {
-        if (!this.model.isPaused()){ //TODO: da controllare (la pause dovrebbe essere una wait?)
-            this.boid.updateVelocity(model);
-            try {
-                barrier.await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            boid.updatePos(model);
-            try {
-                barrier.await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        while(true){
+            if (!this.model.isPaused()){ //TODO: da controllare (la pause dovrebbe essere una wait?)
+                this.boid.updateVelocity(model);
+                try {
+                    barrier.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                boid.updatePos(model);
+                try {
+                    barrier.await();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                try {
+                    Thread.sleep(16); //TODO: da controllare
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
         }
+
     }
 }
