@@ -6,16 +6,16 @@ import pcd.ass01.multithreaded.api.Barrier;
 import java.util.LinkedList;
 import java.util.Optional;
 
-public class MultithreadedBoidsSimulator {
+public class BoidsSimulator {
 
-    private final BoidsModel model;
+    private final MultithreadedBoidsModel model;
     private final LinkedList<Thread> threads = new LinkedList<>();
     private Optional<BoidsView> view = Optional.empty();
     private static final int FRAMERATE = 25;
     private int framerate;
 
 
-    public MultithreadedBoidsSimulator(BoidsModel model) {
+    public BoidsSimulator(MultithreadedBoidsModel model) {
         this.model = model;
     }
 

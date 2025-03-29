@@ -20,14 +20,14 @@ public class MultithreadedSimulation {
 	final static int SCREEN_HEIGHT = 800;
 
 	public static void main(String[] args) {
-		var model = new BoidsModel(
+		var model = new MultithreadedBoidsModel(
 				N_BOIDS,
 				SEPARATION_WEIGHT, ALIGNMENT_WEIGHT, COHESION_WEIGHT,
 				ENVIRONMENT_WIDTH, ENVIRONMENT_HEIGHT,
 				MAX_SPEED,
 				PERCEPTION_RADIUS,
 				AVOID_RADIUS);
-		var sim = new MultithreadedBoidsSimulator(model);
+		var sim = new BoidsSimulator(model);
 		var view = new BoidsView(model, SCREEN_WIDTH, SCREEN_HEIGHT);
 		model.setNumberBoids(view.inputDialog());
 		sim.attachView(view);
