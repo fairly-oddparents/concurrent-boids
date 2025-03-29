@@ -64,14 +64,14 @@ public abstract class BoidsSimulator {
     /**
      * Pauses the simulation.
      */
-    protected synchronized void pauseSimulation() {
+    public synchronized void pauseSimulation() {
         this.isRunning = false;
     }
 
     /**
      * Resumes the simulation.
      */
-    protected synchronized void resumeSimulation() {
+    public synchronized void resumeSimulation() {
         this.isRunning = true;
     }
 
