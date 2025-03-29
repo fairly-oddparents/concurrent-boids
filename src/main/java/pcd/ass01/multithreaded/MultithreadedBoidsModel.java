@@ -1,13 +1,14 @@
 package pcd.ass01.multithreaded;
 
 import pcd.ass01.Boid;
+import pcd.ass01.api.BoidsModel;
 import pcd.ass01.P2d;
 import pcd.ass01.V2d;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultithreadedBoidsModel implements pcd.ass01.api.BoidsModel {
+public class MultithreadedBoidsModel implements BoidsModel {
 
     private final List<Boid> boids;
     private double separationWeight;
