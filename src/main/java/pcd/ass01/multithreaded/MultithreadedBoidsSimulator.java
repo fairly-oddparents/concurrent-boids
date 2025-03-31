@@ -15,19 +15,19 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
 
     @Override
     public void runSimulation() {
-        var nBoids = this.model.getBoids().size();
-        Barrier barrier = new BarrierImpl(nBoids);
-        for (int i = 0; i < nBoids; i++) {
-            threads.add(new BoidThread(this, this.model, barrier, this.model.getBoids().get(i)));
-        }
-        threads.forEach(Thread::start);
-    	while (true) {
-            var t0 = System.currentTimeMillis();
-            if (this.model.getBoids().isEmpty()) {
-                this.stopSimulation(); //TODO: e quando deve ripartire?
+        while(true) {
+            var nBoids = this.model.getBoids().size();
+            Barrier barrier = new BarrierImpl(nBoids);
+            for (int i = 0; i < nBoids; i++) {
+                threads.add(new BoidThread(this, this.model, barrier, this.model.getBoids().get(i)));
             }
-    		updateView(t0);
-    	}
+            threads.forEach(Thread::start);
+            while (!this.model.getBoids().isEmpty()) {
+                var t0 = System.currentTimeMillis();
+                updateView(t0);
+            }
+            this.stopSimulation();
+        }
     }
 
     public synchronized void stopSimulation() {
