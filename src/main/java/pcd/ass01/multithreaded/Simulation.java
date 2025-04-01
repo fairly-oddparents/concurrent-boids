@@ -1,25 +1,24 @@
 package pcd.ass01.multithreaded;
 
+import pcd.ass01.BoidsController;
 import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsView;
 
 import static pcd.ass01.Constants.*;
 
-public class MultithreadedSimulation {
+public class Simulation {
 
 	public static void main(String[] args) {
-		var model = new BoidsModel(
+		BoidsController controller = new MultithreadController(new BoidsModel(
 				DEFAULT_BOIDS,
 				SEPARATION_WEIGHT, ALIGNMENT_WEIGHT, COHESION_WEIGHT,
 				ENVIRONMENT_WIDTH, ENVIRONMENT_HEIGHT,
 				MAX_SPEED,
 				PERCEPTION_RADIUS,
-				AVOID_RADIUS);
-		var sim = new MultithreadedBoidsSimulator(model);
-		var view = new BoidsView(sim, model, SCREEN_WIDTH, SCREEN_HEIGHT);
-		model.setNumberBoids(view.inputDialog());
-		sim.attachView(view);
-		sim.runSimulation();
+				AVOID_RADIUS));
+		BoidsView view = new BoidsView(controller, SCREEN_WIDTH, SCREEN_HEIGHT);
+		controller.attachView(view);
+		controller.run();
 	}
 
 }

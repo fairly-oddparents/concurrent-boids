@@ -3,6 +3,7 @@ package pcd.ass01;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.List;
 
 import java.awt.*;
 import java.util.Hashtable;
@@ -11,16 +12,14 @@ public class BoidsView implements ChangeListener {
 
 	private final JFrame frame;
 	private final BoidsPanel boidsPanel;
-    private final JButton pauseResumeButton, stopButton;
+    private final JButton pauseButton, stopButton;
 	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
-	private final BoidsModel model;
-	private final BoidsSimulator simulator;
+	private final BoidsController controller;
 	private final int width, height;
 	private boolean isPaused;
 
-	public BoidsView(BoidsSimulator simulator, BoidsModel model, int width, int height) {
-		this.simulator = simulator;
-		this.model = model;
+	public BoidsView(BoidsController controller, int width, int height) {
+		this.controller = controller;
 		this.width = width;
 		this.height = height;
 
@@ -36,20 +35,21 @@ public class BoidsView implements ChangeListener {
 		JPanel buttonsPanel = new JPanel();
 
 		this.stopButton = new JButton("Stop");
-		this.stopButton.addActionListener(e -> {
-			this.simulator.stopSimulation();
-			this.model.setNumberBoids(inputDialog());
-			this.updatePauseResumeButton(false);
+		this.stopButton.addActionListener(e -> this.controller.stop());
+		pauseButton = new JButton("Pause");
+		pauseButton.addActionListener(e -> {
+			if (this.isPaused)
+				this.controller.resume();
+			else
+				this.controller.pause();
 		});
-		pauseResumeButton = new JButton("Pause");
-		pauseResumeButton.addActionListener(e -> updatePauseResumeButton(!this.isPaused));
 
 		buttonsPanel.add(stopButton);
-		buttonsPanel.add(pauseResumeButton);
+		buttonsPanel.add(pauseButton);
 
 		cp.add(BorderLayout.NORTH, buttonsPanel);
 
-        boidsPanel = new BoidsPanel(this, model);
+        boidsPanel = new BoidsPanel(this);
 		cp.add(BorderLayout.CENTER, boidsPanel);
 
         JPanel slidersPanel = new JPanel();
@@ -72,16 +72,14 @@ public class BoidsView implements ChangeListener {
         frame.setVisible(true);
     }
 
-	private void updatePauseResumeButton(boolean state) {
+	public void setPauseButtonState(boolean state) {
 		this.isPaused = state;
         if (this.isPaused) {
-			pauseResumeButton.setText("Resume");
-            this.simulator.pauseSimulation();
+			pauseButton.setText("Resume");
 			this.stopButton.setEnabled(false);
 
         } else {
-			pauseResumeButton.setText("Pause");
-            this.simulator.resumeSimulation();
+			pauseButton.setText("Pause");
 			this.stopButton.setEnabled(true);
         }
     }
@@ -119,8 +117,9 @@ public class BoidsView implements ChangeListener {
 		return slider;
 	}
 	
-	public void update(int frameRate) {
+	public void update(int frameRate, List<Boid> boids) {
 		boidsPanel.setFrameRate(frameRate);
+		boidsPanel.setBoids(boids);
 		boidsPanel.repaint();
 	}
 
@@ -128,13 +127,13 @@ public class BoidsView implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == separationSlider) {
 			var val = separationSlider.getValue();
-			model.setSeparationWeight(0.1*val);
+			this.controller.setSeparationWeight(0.1*val);
 		} else if (e.getSource() == cohesionSlider) {
 			var val = cohesionSlider.getValue();
-			model.setCohesionWeight(0.1*val);
+			this.controller.setCohesionWeight(0.1*val);
 		} else {
 			var val = alignmentSlider.getValue();
-			model.setAlignmentWeight(0.1*val);
+			this.controller.setAlignmentWeight(0.1*val);
 		}
 	}
 	

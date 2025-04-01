@@ -40,21 +40,21 @@ public class State {
     /**
      * Stop the simulation.
      */
-    public synchronized void stopSimulation() {
+    public synchronized void stop() {
         this.setState(StateType.STOPPED);
     }
 
     /**
      * Suspend the simulation.
      */
-    public synchronized void pauseSimulation() {
+    public synchronized void pause() {
         this.setState(StateType.PAUSED);
     }
 
     /**
      * Resume the simulation.
      */
-    public synchronized void resumeSimulation() {
+    public synchronized void resume() {
         this.setState(StateType.RUNNING);
         notifyAll();
     }
@@ -62,14 +62,12 @@ public class State {
     /**
      * Wait that the simulation is running.
      */
-    public synchronized void waitForSimulation() {
+    public synchronized void awaitRun() {
         try {
             while (!this.isRunning()) {
                 wait();
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        } catch (InterruptedException ignored) { }
     }
 
 }

@@ -18,9 +18,7 @@ public class BarrierImpl implements Barrier {
         } else {
             try {
                 wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            } catch (InterruptedException ignored) {}
         }
     }
 

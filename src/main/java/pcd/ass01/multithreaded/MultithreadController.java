@@ -2,24 +2,25 @@ package pcd.ass01.multithreaded;
 
 import pcd.ass01.Boid;
 import pcd.ass01.BoidsModel;
-import pcd.ass01.BoidsSimulator;
+import pcd.ass01.BoidsController;
 import pcd.ass01.multithreaded.api.Barrier;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class MultithreadedBoidsSimulator extends BoidsSimulator {
+public class MultithreadController extends BoidsController {
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private final LinkedList<Thread> threads = new LinkedList<>();
 
-    public MultithreadedBoidsSimulator(BoidsModel model) {
+    public MultithreadController(BoidsModel model) {
         super(model);
     }
 
     @Override
-    public void runSimulation() {
+    public void run() {
+        super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
-            super.waitForSimulation();
+            super.awaitRun();
             System.out.println("Starting simulation");  //TODO: remove logs
             Barrier velBarrier = new BarrierImpl(NUM_THREADS);
             Barrier posBarrier = new BarrierImpl(NUM_THREADS + 1);
@@ -29,7 +30,7 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
                 int start = i * boidsPerWorker;
                 int end = (i == NUM_THREADS - 1) ? boids.size() : start + boidsPerWorker;
                 List<Boid> subList = boids.subList(start, end);
-                this.threads.add(new BoidThread(this, this.model, velBarrier, posBarrier, subList));
+                this.threads.add(new BoidWorker(this, this.model, velBarrier, posBarrier, subList));
             }
             threads.forEach(Thread::start);
             while (!super.isStopped()) {
@@ -52,12 +53,7 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
         for (Thread thread : threads) {
             thread.interrupt();
         }
-        for(Thread thread : threads){
-            System.out.println(thread.getId()+ " interrotto? "+ thread.isInterrupted());
-        }
-        System.out.println(threads.size());
         System.out.println("All threads killed");   //TODO: remove logs
         threads.clear();
-        System.out.println(threads.size());
     }
 }
