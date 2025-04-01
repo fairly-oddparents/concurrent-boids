@@ -1,9 +1,10 @@
 package pcd.ass01;
 
 /**
- * Abstract class representing a Boids simulator.
+ * Abstract class representing the controller (from MVC architecture) for the Boids simulation.
  */
 public abstract class BoidsController {
+
     private static final int FRAMERATE = 25;
     private final State state;
     private BoidsView view;
@@ -11,14 +12,18 @@ public abstract class BoidsController {
 
     protected final BoidsModel model;
 
+    /**
+     * Constructor for the BoidsController.
+     * @param model the model
+     */
     public BoidsController(BoidsModel model) {
         this.model = model;
         this.state = new State();
     }
 
     /**
-     * Attaches the view to the simulation.
-     * @param view the view
+     * Attaches the view to the controller.
+     * @param view the view to attach
      */
     public void attachView(BoidsView view) {
         this.view = view;
@@ -76,7 +81,7 @@ public abstract class BoidsController {
     }
 
     /**
-     * Waits for the simulation to start.
+     * Waits for the simulation to run.
      */
     public void awaitRun() {
         this.state.awaitRun();
@@ -107,14 +112,26 @@ public abstract class BoidsController {
         this.resume();
     }
 
+    /**
+     * Sets the separation weight.
+     * @param weight the separation weight
+     */
     public void setSeparationWeight(double weight) {
         this.model.setSeparationWeight(weight);
     }
 
+    /**
+     * Sets the cohesion weight.
+     * @param weight the cohesion weight
+     */
     public void setCohesionWeight(double weight) {
         this.model.setCohesionWeight(weight);
     }
 
+    /**
+     * Sets the alignment weight.
+     * @param weight the alignment weight
+     */
     public void setAlignmentWeight(double weight) {
         this.model.setAlignmentWeight(weight);
     }
