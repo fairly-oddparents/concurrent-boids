@@ -1,7 +1,5 @@
 package pcd.ass01;
 
-import java.util.List;
-
 /**
  * Abstract class representing a Boids simulator.
  */
@@ -92,8 +90,12 @@ public abstract class BoidsController {
         return this.state.isStopped();
     }
 
-    protected void askNumberOfBoids() {
-        this.model.setNumberBoids(this.view.inputDialog());
+    /**
+     * Gets the number of boids from the user.
+     * @return the number of boids
+     */
+    public int getNumberOfBoids() {
+        return this.view.inputDialog();
     }
 
     /**
@@ -101,7 +103,7 @@ public abstract class BoidsController {
      */
     public void stop() {
         this.state.stop();
-        askNumberOfBoids();
+        this.model.setNumberBoids(this.getNumberOfBoids());
         this.resume();
     }
 

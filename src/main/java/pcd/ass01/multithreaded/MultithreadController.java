@@ -18,7 +18,7 @@ public class MultithreadController extends BoidsController {
 
     @Override
     public void run() {
-        super.askNumberOfBoids();
+        super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
             super.awaitRun();
             System.out.println("Starting simulation");  //TODO: remove logs

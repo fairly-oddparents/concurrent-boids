@@ -11,7 +11,7 @@ public class SequentialController extends BoidsController {
 
     @Override
     public void run() {
-        super.askNumberOfBoids();
+        super.model.setNumberBoids(super.getNumberOfBoids());
     	while (true) {
             var t0 = System.currentTimeMillis();
     		var boids = model.getBoids();
