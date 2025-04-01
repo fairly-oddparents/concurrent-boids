@@ -11,7 +11,7 @@ public class BoidsView implements ChangeListener {
 
 	private final JFrame frame;
 	private final BoidsPanel boidsPanel;
-    private final JButton pauseResumeButton;
+    private final JButton pauseResumeButton, stopButton;
 	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
 	private final BoidsModel model;
 	private final BoidsSimulator simulator;
@@ -35,8 +35,8 @@ public class BoidsView implements ChangeListener {
 
 		JPanel buttonsPanel = new JPanel();
 
-		JButton stopButton = new JButton("Stop");
-		stopButton.addActionListener(e -> {
+		this.stopButton = new JButton("Stop");
+		this.stopButton.addActionListener(e -> {
 			this.simulator.stopSimulation();
 			this.model.setNumberBoids(inputDialog());
 			this.updatePauseResumeButton(false);
@@ -77,9 +77,12 @@ public class BoidsView implements ChangeListener {
         if (this.isPaused) {
 			pauseResumeButton.setText("Resume");
             this.simulator.pauseSimulation();
+			this.stopButton.setEnabled(false);
+
         } else {
 			pauseResumeButton.setText("Pause");
             this.simulator.resumeSimulation();
+			this.stopButton.setEnabled(true);
         }
     }
 
