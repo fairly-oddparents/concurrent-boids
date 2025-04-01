@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MultithreadedBoidsSimulator extends BoidsSimulator {
+    private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private final LinkedList<Thread> threads = new LinkedList<>();
 
     public MultithreadedBoidsSimulator(BoidsModel model) {
@@ -17,17 +18,16 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
 
     @Override
     public void runSimulation() {
-        final int numThreads = Runtime.getRuntime().availableProcessors() + 1;
         while (true) {
             super.waitForSimulation();
             System.out.println("Starting simulation");  //TODO: remove logs
-            Barrier velBarrier = new BarrierImpl(numThreads);
-            Barrier posBarrier = new BarrierImpl(numThreads + 1);
+            Barrier velBarrier = new BarrierImpl(NUM_THREADS);
+            Barrier posBarrier = new BarrierImpl(NUM_THREADS + 1);
             List<Boid> boids = this.model.getBoids();
-            int boidsPerWorker = boids.size() / numThreads;
-            for (int i = 0; i < numThreads; i++) {
+            int boidsPerWorker = boids.size() / NUM_THREADS;
+            for (int i = 0; i < NUM_THREADS; i++) {
                 int start = i * boidsPerWorker;
-                int end = (i == numThreads - 1) ? boids.size() : start + boidsPerWorker;
+                int end = (i == NUM_THREADS - 1) ? boids.size() : start + boidsPerWorker;
                 List<Boid> subList = boids.subList(start, end);
                 this.threads.add(new BoidThread(this, this.model, velBarrier, posBarrier, subList));
             }
