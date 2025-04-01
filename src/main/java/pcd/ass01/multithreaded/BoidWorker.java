@@ -10,13 +10,19 @@ import java.util.List;
 public class BoidWorker extends Thread{
 
     private final Barrier velBarrier, posBarrier;
-    private final BoidsController sim;
+    private final BoidsController controller;
     private final BoidsModel model;
     private final List<Boid> boids;
 
 
-    public BoidWorker(BoidsController sim, BoidsModel model, Barrier velBarrier, Barrier posBarrier, List<Boid> boids) {
-        this.sim = sim;
+    public BoidWorker(
+            BoidsController controller,
+            BoidsModel model,
+            Barrier velBarrier,
+            Barrier posBarrier,
+            List<Boid> boids
+    ) {
+        this.controller = controller;
         this.model = model;
         this.velBarrier = velBarrier;
         this.posBarrier = posBarrier;
@@ -26,7 +32,7 @@ public class BoidWorker extends Thread{
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            this.sim.awaitRun();
+            this.controller.awaitRun();
             for (Boid boid : this.boids) {
                 boid.updateVelocity(model);
             }

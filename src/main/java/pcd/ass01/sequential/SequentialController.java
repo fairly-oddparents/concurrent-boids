@@ -5,6 +5,7 @@ import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsController;
 
 public class SequentialController extends BoidsController {
+
     public SequentialController(BoidsModel model) {
         super(model);
     }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MultithreadController extends BoidsController {
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
-    private final LinkedList<Thread> threads = new LinkedList<>();
+    private final LinkedList<Thread> workers = new LinkedList<>();
 
     public MultithreadController(BoidsModel model) {
         super(model);
@@ -30,9 +30,9 @@ public class MultithreadController extends BoidsController {
                 int start = i * boidsPerWorker;
                 int end = (i == NUM_THREADS - 1) ? boids.size() : start + boidsPerWorker;
                 List<Boid> subList = boids.subList(start, end);
-                this.threads.add(new BoidWorker(this, this.model, velBarrier, posBarrier, subList));
+                this.workers.add(new BoidWorker(this, this.model, velBarrier, posBarrier, subList));
             }
-            threads.forEach(Thread::start);
+            workers.forEach(Thread::start);
             while (!super.isStopped()) {
                 var t0 = System.currentTimeMillis();
                 updateView(t0);
@@ -50,10 +50,10 @@ public class MultithreadController extends BoidsController {
     }
 
     public synchronized void removeThreads() {
-        for (Thread thread : threads) {
+        for (Thread thread : workers) {
             thread.interrupt();
         }
         System.out.println("All threads killed");   //TODO: remove logs
-        threads.clear();
+        workers.clear();
     }
 }
