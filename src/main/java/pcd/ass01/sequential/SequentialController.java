@@ -4,8 +4,8 @@ import pcd.ass01.Boid;
 import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsController;
 
-public class SequentialBoidsSimulator extends BoidsController {
-    public SequentialBoidsSimulator(BoidsModel model) {
+public class SequentialController extends BoidsController {
+    public SequentialController(BoidsModel model) {
         super(model);
     }
 
