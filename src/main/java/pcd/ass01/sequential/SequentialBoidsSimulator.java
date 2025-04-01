@@ -11,6 +11,7 @@ public class SequentialBoidsSimulator extends BoidsController {
 
     @Override
     public void run() {
+        super.askNumberOfBoids();
     	while (true) {
             var t0 = System.currentTimeMillis();
     		var boids = model.getBoids();

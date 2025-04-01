@@ -3,6 +3,7 @@ package pcd.ass01;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.List;
 
 import java.awt.*;
 import java.util.Hashtable;
@@ -13,14 +14,12 @@ public class BoidsView implements ChangeListener {
 	private final BoidsPanel boidsPanel;
     private final JButton pauseButton, stopButton;
 	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
-	private final BoidsModel model;
 	private final BoidsController controller;
 	private final int width, height;
 	private boolean isPaused;
 
-	public BoidsView(BoidsController controller, BoidsModel model, int width, int height) {
+	public BoidsView(BoidsController controller, int width, int height) {
 		this.controller = controller;
-		this.model = model;
 		this.width = width;
 		this.height = height;
 
@@ -36,10 +35,7 @@ public class BoidsView implements ChangeListener {
 		JPanel buttonsPanel = new JPanel();
 
 		this.stopButton = new JButton("Stop");
-		this.stopButton.addActionListener(e -> {
-			this.controller.stop();
-			this.model.setNumberBoids(inputDialog());
-		});
+		this.stopButton.addActionListener(e -> this.controller.stop());
 		pauseButton = new JButton("Pause");
 		pauseButton.addActionListener(e -> {
 			if (this.isPaused)
@@ -121,9 +117,9 @@ public class BoidsView implements ChangeListener {
 		return slider;
 	}
 	
-	public void update(int frameRate) {
+	public void update(int frameRate, List<Boid> boids) {
 		boidsPanel.setFrameRate(frameRate);
-		boidsPanel.setBoids(model.getBoids());
+		boidsPanel.setBoids(boids);
 		boidsPanel.repaint();
 	}
 
@@ -131,13 +127,13 @@ public class BoidsView implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == separationSlider) {
 			var val = separationSlider.getValue();
-			model.setSeparationWeight(0.1*val);
+			this.controller.setSeparationWeight(0.1*val);
 		} else if (e.getSource() == cohesionSlider) {
 			var val = cohesionSlider.getValue();
-			model.setCohesionWeight(0.1*val);
+			this.controller.setCohesionWeight(0.1*val);
 		} else {
 			var val = alignmentSlider.getValue();
-			model.setAlignmentWeight(0.1*val);
+			this.controller.setAlignmentWeight(0.1*val);
 		}
 	}
 	

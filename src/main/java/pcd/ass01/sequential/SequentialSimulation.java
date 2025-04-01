@@ -16,8 +16,7 @@ public class SequentialSimulation {
 				PERCEPTION_RADIUS,
 				AVOID_RADIUS);
     	var sim = new SequentialBoidsSimulator(model);
-    	var view = new BoidsView(sim, model, SCREEN_WIDTH, SCREEN_HEIGHT);
-		model.setNumberBoids(view.inputDialog());
+    	var view = new BoidsView(sim, SCREEN_WIDTH, SCREEN_HEIGHT);
     	sim.attachView(view);
     	sim.run();
     }

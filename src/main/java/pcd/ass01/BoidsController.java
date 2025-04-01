@@ -1,5 +1,7 @@
 package pcd.ass01;
 
+import java.util.List;
+
 /**
  * Abstract class representing a Boids simulator.
  */
@@ -29,7 +31,7 @@ public abstract class BoidsController {
      * @param t0 the start time of the update
      */
     protected void updateView(long t0) {
-        view.update(framerate);
+        view.update(framerate, this.model.getBoids());
         var t1 = System.currentTimeMillis();
         var dtElapsed = t1 - t0;
         var frameratePeriod = 1000/FRAMERATE;
@@ -90,11 +92,29 @@ public abstract class BoidsController {
         return this.state.isStopped();
     }
 
+    protected void askNumberOfBoids() {
+        this.model.setNumberBoids(this.view.inputDialog());
+    }
+
     /**
      * Stops the simulation.
      */
     public void stop() {
         this.state.stop();
+        askNumberOfBoids();
+        this.resume();
+    }
+
+    public void setSeparationWeight(double weight) {
+        this.model.setSeparationWeight(weight);
+    }
+
+    public void setCohesionWeight(double weight) {
+        this.model.setCohesionWeight(weight);
+    }
+
+    public void setAlignmentWeight(double weight) {
+        this.model.setAlignmentWeight(weight);
     }
 
 }
