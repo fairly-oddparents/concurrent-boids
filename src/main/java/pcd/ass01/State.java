@@ -67,7 +67,9 @@ public class State {
             while (!this.isRunning()) {
                 wait();
             }
-        } catch (InterruptedException ignored) { }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
 }

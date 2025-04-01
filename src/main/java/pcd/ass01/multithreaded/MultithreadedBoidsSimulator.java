@@ -41,7 +41,9 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
             while (this.model.getBoids().isEmpty()) {
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ignored) { }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
@@ -50,7 +52,12 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
         for (Thread thread : threads) {
             thread.interrupt();
         }
+        for(Thread thread : threads){
+            System.out.println(thread.getId()+ " interrotto? "+ thread.isInterrupted());
+        }
+        System.out.println(threads.size());
         System.out.println("All threads killed");   //TODO: remove logs
         threads.clear();
+        System.out.println(threads.size());
     }
 }

@@ -25,7 +25,7 @@ public class BoidThread extends Thread{
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.interrupted()) {
             this.sim.waitForSimulation();
             for (Boid boid : this.boids) {
                 boid.updateVelocity(model);

@@ -40,7 +40,9 @@ public abstract class BoidsSimulator {
             if (dtElapsed < frameratePeriod) {
                 try {
                     Thread.sleep(frameratePeriod - dtElapsed);
-                } catch (Exception ignored) {}
+                } catch (Exception e) {
+                    Thread.currentThread().interrupt();
+                }
                 framerate = FRAMERATE;
             } else {
                 framerate = (int) (1000/dtElapsed);
