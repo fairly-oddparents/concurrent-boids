@@ -7,15 +7,15 @@ import java.util.Optional;
  */
 public abstract class BoidsSimulator {
     private static final int FRAMERATE = 25;
+    private final State state;
     private Optional<BoidsView> view = Optional.empty();
     private int framerate;
-    private boolean isRunning;
 
     protected final BoidsModel model;
 
     public BoidsSimulator(BoidsModel model) {
         this.model = model;
-        this.isRunning = true;
+        this.state = new State();
     }
 
     /**
@@ -52,8 +52,8 @@ public abstract class BoidsSimulator {
      * Checks whether the simulation is running or not.
      * @return true if the simulation is running, false otherwise
      */
-    public synchronized boolean isRunning() {
-        return this.isRunning;
+    public boolean isRunning() {
+        return this.state.isRunning();
     }
 
     /**
@@ -64,15 +64,32 @@ public abstract class BoidsSimulator {
     /**
      * Pauses the simulation.
      */
-    public synchronized void pauseSimulation() {
-        this.isRunning = false;
+    public void pauseSimulation() {
+        System.out.println("Pausing simulation");
+        this.state.pauseSimulation();
     }
 
     /**
      * Resumes the simulation.
      */
-    public synchronized void resumeSimulation() {
-        this.isRunning = true;
+    public void resumeSimulation() {
+        System.out.println("Resuming simulation");
+        this.state.resumeSimulation();
+    }
+
+    /**
+     * Waits for the simulation to start.
+     */
+    public void waitForSimulation() {
+        this.state.waitForSimulation();
+    }
+
+    public boolean isStopped() {
+        return this.state.isStopped();
+    }
+
+    public void stopSimulation() {
+        this.state.stopSimulation();
     }
 
 }

@@ -26,20 +26,17 @@ public class BoidThread extends Thread{
     @Override
     public void run() {
         while(true){
-            if (this.sim.isRunning()){ //TODO: da controllare (la pause dovrebbe essere una wait?)
+            try {
+                this.sim.waitForSimulation();
                 for (Boid boid : this.boids) {
                     boid.updateVelocity(model);
                 }
-                try {
-                    velBarrier.await();
-                } catch (InterruptedException ignored) {}
+                velBarrier.await();
                 for (Boid boid : this.boids) {
                     boid.updatePos(model);
                 }
-                try {
-                    posBarrier.await();
-                } catch (InterruptedException ignored) {}
-            }
+                posBarrier.await();
+            } catch (InterruptedException ignored) { }
         }
     }
 }

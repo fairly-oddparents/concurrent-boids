@@ -37,9 +37,9 @@ public class BoidsView implements ChangeListener {
 
 		JButton stopButton = new JButton("Stop");
 		stopButton.addActionListener(e -> {
-			this.updatePauseResumeButton(false);
-			this.model.clearBoids();
+			this.simulator.stopSimulation();
 			this.model.setNumberBoids(inputDialog());
+			this.updatePauseResumeButton(false);
 		});
 		pauseResumeButton = new JButton("Pause");
 		pauseResumeButton.addActionListener(e -> updatePauseResumeButton(!this.isPaused));

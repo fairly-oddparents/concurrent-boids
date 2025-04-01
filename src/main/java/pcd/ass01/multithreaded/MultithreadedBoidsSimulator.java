@@ -19,32 +19,40 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
     public void runSimulation() {
         final int numThreads = Runtime.getRuntime().availableProcessors() + 1;
         while(true) {
-            var nBoids = this.model.getBoids().size();
+            super.waitForSimulation();
+            System.out.println("Starting simulation with " + numThreads + " threads");
             Barrier velBarrier = new BarrierImpl(numThreads);
             Barrier posBarrier = new BarrierImpl(numThreads + 1);
             List<Boid> boids = this.model.getBoids();
             int boidsPerWorker = boids.size() / numThreads;
             for (int i = 0; i < numThreads; i++) {
                 int start = i * boidsPerWorker;
-                List<Boid> subList = boids.subList(start, (i == numThreads - 1) ? boids.size() : start + boidsPerWorker);
-                threads.add(new BoidThread(this, this.model, velBarrier, posBarrier, subList));
+                int end = (i == numThreads - 1) ? boids.size() : start + boidsPerWorker;
+                List<Boid> subList = boids.subList(start, end);
+                this.threads.add(new BoidThread(this, this.model, velBarrier, posBarrier, subList));
             }
             threads.forEach(Thread::start);
-            while (!this.model.getBoids().isEmpty()) {
+            while (!super.isStopped()) {
                 var t0 = System.currentTimeMillis();
+                updateView(t0);
                 try {
                     posBarrier.await();
-                } catch (InterruptedException ignored) {}
-                updateView(t0);
+                } catch (InterruptedException ignored) { }
             }
-            this.stopSimulation();
+            this.removeThreads();
+            while (this.model.getBoids().isEmpty()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) { }
+            }
         }
     }
 
-    public synchronized void stopSimulation() {
+    public synchronized void removeThreads() {
         for (Thread thread : threads) {
             thread.interrupt();
         }
+        System.out.println("All threads killed");
         threads.clear();
     }
 }
