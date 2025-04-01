@@ -30,8 +30,8 @@ public class State {
     }
 
     /**
-     * Check if the simulation is paused.
-     * @return true if the simulation is paused, false otherwise
+     * Check if the simulation is stopped.
+     * @return true if the simulation is stopped, false otherwise
      */
     public synchronized boolean isStopped() {
         return this.state.equals(StateType.STOPPED);
