@@ -1,7 +1,7 @@
 package pcd.ass01;
 
 /**
- * This class is a monitor that manage the state of the simulation: running or suspended.
+ * This class is a monitor that manage the state of the simulation.
  */
 public class State {
 
