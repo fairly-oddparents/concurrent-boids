@@ -8,7 +8,7 @@ import java.util.Optional;
 public abstract class BoidsController {
     private static final int FRAMERATE = 25;
     private final State state;
-    private Optional<BoidsView> view = Optional.empty();
+    private BoidsView view;
     private int framerate;
 
     protected final BoidsModel model;
@@ -23,7 +23,7 @@ public abstract class BoidsController {
      * @param view the view
      */
     public void attachView(BoidsView view) {
-        this.view = Optional.of(view);
+        this.view = view;
     }
 
     /**
@@ -31,20 +31,18 @@ public abstract class BoidsController {
      * @param t0 the start time of the update
      */
     protected void updateView(long t0) {
-        if (view.isPresent()) {
-            view.get().update(framerate);
-            var t1 = System.currentTimeMillis();
-            var dtElapsed = t1 - t0;
-            var frameratePeriod = 1000/FRAMERATE;
+        view.update(framerate);
+        var t1 = System.currentTimeMillis();
+        var dtElapsed = t1 - t0;
+        var frameratePeriod = 1000/FRAMERATE;
 
-            if (dtElapsed < frameratePeriod) {
-                try {
-                    Thread.sleep(frameratePeriod - dtElapsed);
-                } catch (Exception ignored) {}
-                framerate = FRAMERATE;
-            } else {
-                framerate = (int) (1000/dtElapsed);
-            }
+        if (dtElapsed < frameratePeriod) {
+            try {
+                Thread.sleep(frameratePeriod - dtElapsed);
+            } catch (Exception ignored) {}
+            framerate = FRAMERATE;
+        } else {
+            framerate = (int) (1000/dtElapsed);
         }
     }
 
