@@ -63,6 +63,7 @@ public abstract class BoidsController {
     public void pause() {
         System.out.println("Pausing simulation");   //TODO: remove logs
         this.state.pause();
+        this.view.setPauseButtonState(true);
     }
 
     /**
@@ -71,6 +72,7 @@ public abstract class BoidsController {
     public void resume() {
         System.out.println("Resuming simulation");  //TODO: remove logs
         this.state.resume();
+        this.view.setPauseButtonState(false);
     }
 
     /**

@@ -11,15 +11,15 @@ public class BoidsView implements ChangeListener {
 
 	private final JFrame frame;
 	private final BoidsPanel boidsPanel;
-    private final JButton pauseResumeButton, stopButton;
+    private final JButton pauseButton, stopButton;
 	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
 	private final BoidsModel model;
-	private final BoidsController simulator;
+	private final BoidsController controller;
 	private final int width, height;
 	private boolean isPaused;
 
-	public BoidsView(BoidsController simulator, BoidsModel model, int width, int height) {
-		this.simulator = simulator;
+	public BoidsView(BoidsController controller, BoidsModel model, int width, int height) {
+		this.controller = controller;
 		this.model = model;
 		this.width = width;
 		this.height = height;
@@ -37,15 +37,19 @@ public class BoidsView implements ChangeListener {
 
 		this.stopButton = new JButton("Stop");
 		this.stopButton.addActionListener(e -> {
-			this.simulator.stop();
+			this.controller.stop();
 			this.model.setNumberBoids(inputDialog());
-			this.updatePauseResumeButton(false);
 		});
-		pauseResumeButton = new JButton("Pause");
-		pauseResumeButton.addActionListener(e -> updatePauseResumeButton(!this.isPaused));
+		pauseButton = new JButton("Pause");
+		pauseButton.addActionListener(e -> {
+			if (this.isPaused)
+				this.controller.resume();
+			else
+				this.controller.pause();
+		});
 
 		buttonsPanel.add(stopButton);
-		buttonsPanel.add(pauseResumeButton);
+		buttonsPanel.add(pauseButton);
 
 		cp.add(BorderLayout.NORTH, buttonsPanel);
 
@@ -72,16 +76,14 @@ public class BoidsView implements ChangeListener {
         frame.setVisible(true);
     }
 
-	private void updatePauseResumeButton(boolean state) {
+	public void setPauseButtonState(boolean state) {
 		this.isPaused = state;
         if (this.isPaused) {
-			pauseResumeButton.setText("Resume");
-            this.simulator.pause();
+			pauseButton.setText("Resume");
 			this.stopButton.setEnabled(false);
 
         } else {
-			pauseResumeButton.setText("Pause");
-            this.simulator.resume();
+			pauseButton.setText("Pause");
 			this.stopButton.setEnabled(true);
         }
     }
