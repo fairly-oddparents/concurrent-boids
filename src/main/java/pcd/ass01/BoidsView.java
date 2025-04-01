@@ -14,11 +14,11 @@ public class BoidsView implements ChangeListener {
     private final JButton pauseResumeButton, stopButton;
 	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
 	private final BoidsModel model;
-	private final BoidsSimulator simulator;
+	private final BoidsController simulator;
 	private final int width, height;
 	private boolean isPaused;
 
-	public BoidsView(BoidsSimulator simulator, BoidsModel model, int width, int height) {
+	public BoidsView(BoidsController simulator, BoidsModel model, int width, int height) {
 		this.simulator = simulator;
 		this.model = model;
 		this.width = width;

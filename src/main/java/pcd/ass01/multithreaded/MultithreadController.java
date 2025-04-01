@@ -2,17 +2,17 @@ package pcd.ass01.multithreaded;
 
 import pcd.ass01.Boid;
 import pcd.ass01.BoidsModel;
-import pcd.ass01.BoidsSimulator;
+import pcd.ass01.BoidsController;
 import pcd.ass01.multithreaded.api.Barrier;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class MultithreadedBoidsSimulator extends BoidsSimulator {
+public class MultithreadController extends BoidsController {
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private final LinkedList<Thread> threads = new LinkedList<>();
 
-    public MultithreadedBoidsSimulator(BoidsModel model) {
+    public MultithreadController(BoidsModel model) {
         super(model);
     }
 
@@ -29,7 +29,7 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
                 int start = i * boidsPerWorker;
                 int end = (i == NUM_THREADS - 1) ? boids.size() : start + boidsPerWorker;
                 List<Boid> subList = boids.subList(start, end);
-                this.threads.add(new BoidThread(this, this.model, velBarrier, posBarrier, subList));
+                this.threads.add(new BoidWorker(this, this.model, velBarrier, posBarrier, subList));
             }
             threads.forEach(Thread::start);
             while (!super.isStopped()) {
@@ -41,7 +41,9 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
             while (this.model.getBoids().isEmpty()) {
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ignored) { }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }

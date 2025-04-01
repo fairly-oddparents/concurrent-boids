@@ -5,7 +5,7 @@ import pcd.ass01.BoidsView;
 
 import static pcd.ass01.Constants.*;
 
-public class MultithreadedSimulation {
+public class Simulation {
 
 	public static void main(String[] args) {
 		var model = new BoidsModel(
@@ -15,7 +15,7 @@ public class MultithreadedSimulation {
 				MAX_SPEED,
 				PERCEPTION_RADIUS,
 				AVOID_RADIUS);
-		var sim = new MultithreadedBoidsSimulator(model);
+		var sim = new MultithreadController(model);
 		var view = new BoidsView(sim, model, SCREEN_WIDTH, SCREEN_HEIGHT);
 		model.setNumberBoids(view.inputDialog());
 		sim.attachView(view);

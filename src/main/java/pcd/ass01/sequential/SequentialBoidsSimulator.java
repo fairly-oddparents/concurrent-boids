@@ -2,9 +2,9 @@ package pcd.ass01.sequential;
 
 import pcd.ass01.Boid;
 import pcd.ass01.BoidsModel;
-import pcd.ass01.BoidsSimulator;
+import pcd.ass01.BoidsController;
 
-public class SequentialBoidsSimulator extends BoidsSimulator {
+public class SequentialBoidsSimulator extends BoidsController {
     public SequentialBoidsSimulator(BoidsModel model) {
         super(model);
     }

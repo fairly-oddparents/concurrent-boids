@@ -5,7 +5,7 @@ import java.util.Optional;
 /**
  * Abstract class representing a Boids simulator.
  */
-public abstract class BoidsSimulator {
+public abstract class BoidsController {
     private static final int FRAMERATE = 25;
     private final State state;
     private Optional<BoidsView> view = Optional.empty();
@@ -13,7 +13,7 @@ public abstract class BoidsSimulator {
 
     protected final BoidsModel model;
 
-    public BoidsSimulator(BoidsModel model) {
+    public BoidsController(BoidsModel model) {
         this.model = model;
         this.state = new State();
     }

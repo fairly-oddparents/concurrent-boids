@@ -2,20 +2,20 @@ package pcd.ass01.multithreaded;
 
 import pcd.ass01.Boid;
 import pcd.ass01.BoidsModel;
-import pcd.ass01.BoidsSimulator;
+import pcd.ass01.BoidsController;
 import pcd.ass01.multithreaded.api.Barrier;
 
 import java.util.List;
 
-public class BoidThread extends Thread{
+public class BoidWorker extends Thread{
 
     private final Barrier velBarrier, posBarrier;
-    private final BoidsSimulator sim;
+    private final BoidsController sim;
     private final BoidsModel model;
     private final List<Boid> boids;
 
 
-    public BoidThread(BoidsSimulator sim, BoidsModel model, Barrier velBarrier, Barrier posBarrier, List<Boid> boids) {
+    public BoidWorker(BoidsController sim, BoidsModel model, Barrier velBarrier, Barrier posBarrier, List<Boid> boids) {
         this.sim = sim;
         this.model = model;
         this.velBarrier = velBarrier;
