@@ -59,13 +59,13 @@ public abstract class BoidsSimulator {
     /**
      * Runs the simulation.
      */
-    protected abstract void runSimulation();
+    public abstract void runSimulation();
 
     /**
      * Pauses the simulation.
      */
     public void pauseSimulation() {
-        System.out.println("Pausing simulation");
+        System.out.println("Pausing simulation");   //TODO: remove logs
         this.state.pauseSimulation();
     }
 
@@ -73,7 +73,7 @@ public abstract class BoidsSimulator {
      * Resumes the simulation.
      */
     public void resumeSimulation() {
-        System.out.println("Resuming simulation");
+        System.out.println("Resuming simulation");  //TODO: remove logs
         this.state.resumeSimulation();
     }
 
@@ -84,10 +84,17 @@ public abstract class BoidsSimulator {
         this.state.waitForSimulation();
     }
 
+    /**
+     * Checks if the simulation is stopped.
+     * @return true if the simulation is stopped, false otherwise
+     */
     public boolean isStopped() {
         return this.state.isStopped();
     }
 
+    /**
+     * Stops the simulation.
+     */
     public void stopSimulation() {
         this.state.stopSimulation();
     }

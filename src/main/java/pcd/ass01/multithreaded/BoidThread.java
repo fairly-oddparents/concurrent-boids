@@ -25,18 +25,16 @@ public class BoidThread extends Thread{
 
     @Override
     public void run() {
-        while(true){
-            try {
-                this.sim.waitForSimulation();
-                for (Boid boid : this.boids) {
-                    boid.updateVelocity(model);
-                }
-                velBarrier.await();
-                for (Boid boid : this.boids) {
-                    boid.updatePos(model);
-                }
-                posBarrier.await();
-            } catch (InterruptedException ignored) { }
+        while (true) {
+            this.sim.waitForSimulation();
+            for (Boid boid : this.boids) {
+                boid.updateVelocity(model);
+            }
+            velBarrier.await();
+            for (Boid boid : this.boids) {
+                boid.updatePos(model);
+            }
+            posBarrier.await();
         }
     }
 }

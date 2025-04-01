@@ -18,9 +18,9 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
     @Override
     public void runSimulation() {
         final int numThreads = Runtime.getRuntime().availableProcessors() + 1;
-        while(true) {
+        while (true) {
             super.waitForSimulation();
-            System.out.println("Starting simulation with " + numThreads + " threads");
+            System.out.println("Starting simulation");  //TODO: remove logs
             Barrier velBarrier = new BarrierImpl(numThreads);
             Barrier posBarrier = new BarrierImpl(numThreads + 1);
             List<Boid> boids = this.model.getBoids();
@@ -35,9 +35,7 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
             while (!super.isStopped()) {
                 var t0 = System.currentTimeMillis();
                 updateView(t0);
-                try {
-                    posBarrier.await();
-                } catch (InterruptedException ignored) { }
+                posBarrier.await();
             }
             this.removeThreads();
             while (this.model.getBoids().isEmpty()) {
@@ -52,7 +50,7 @@ public class MultithreadedBoidsSimulator extends BoidsSimulator {
         for (Thread thread : threads) {
             thread.interrupt();
         }
-        System.out.println("All threads killed");
+        System.out.println("All threads killed");   //TODO: remove logs
         threads.clear();
     }
 }

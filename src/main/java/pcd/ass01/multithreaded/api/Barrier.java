@@ -1,7 +1,14 @@
 package pcd.ass01.multithreaded.api;
 
+/**
+ * Barrier interface for synchronizing threads.
+ */
 public interface Barrier {
 
-    void await() throws InterruptedException;
+    /**
+     * Waits for all threads to reach this barrier.
+     * This method blocks the current thread until all threads have called this method.
+     */
+    void await();
 
 }

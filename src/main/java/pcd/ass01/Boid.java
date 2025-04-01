@@ -20,17 +20,12 @@ public class Boid {
     public V2d getVel() {
     	return vel;
     }
-    
-    public void update(BoidsModel model) {
-    	updateVelocity(model);
-        updatePos(model);
-    }
 
     public void updateVelocity(BoidsModel model) {
     	List<Boid> nearbyBoids = getNearbyBoids(model);
-    	V2d separation = calculateSeparation(nearbyBoids, model);
-    	V2d alignment = calculateAlignment(nearbyBoids, model);
-    	V2d cohesion = calculateCohesion(nearbyBoids, model);
+    	V2d separation = calculateSeparation(nearbyBoids, model.getAvoidRadius());
+    	V2d alignment = calculateAlignment(nearbyBoids);
+    	V2d cohesion = calculateCohesion(nearbyBoids);
     	vel = vel.sum(alignment.mul(model.getAlignmentWeight()))
     			.sum(separation.mul(model.getSeparationWeight()))
     			.sum(cohesion.mul(model.getCohesionWeight()));
@@ -61,7 +56,7 @@ public class Boid {
         return list;
     }
     
-    private V2d calculateAlignment(List<Boid> nearbyBoids, BoidsModel model) {
+    private V2d calculateAlignment(List<Boid> nearbyBoids) {
         double avgVx = 0;
         double avgVy = 0;
         if (!nearbyBoids.isEmpty()) {
@@ -78,7 +73,7 @@ public class Boid {
         }
     }
 
-    private V2d calculateCohesion(List<Boid> nearbyBoids, BoidsModel model) {
+    private V2d calculateCohesion(List<Boid> nearbyBoids) {
         double centerX = 0;
         double centerY = 0;
         if (!nearbyBoids.isEmpty()) {
@@ -95,14 +90,14 @@ public class Boid {
         }
     }
     
-    private V2d calculateSeparation(List<Boid> nearbyBoids, BoidsModel model) {
+    private V2d calculateSeparation(List<Boid> nearbyBoids, Double avoidRadius) {
         double dx = 0;
         double dy = 0;
         int count = 0;
         for (Boid other: nearbyBoids) {
         	P2d otherPos = other.getPos();
     	    double distance = pos.distance(otherPos);
-    	    if (distance < model.getAvoidRadius()) {
+    	    if (distance < avoidRadius) {
     	    	dx += pos.x() - otherPos.x();
     	    	dy += pos.y() - otherPos.y();
     	    	count++;

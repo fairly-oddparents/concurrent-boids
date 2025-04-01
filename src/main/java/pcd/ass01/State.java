@@ -5,11 +5,12 @@ package pcd.ass01;
  */
 public class State {
 
-    public enum StateType {
+    private enum StateType {
         RUNNING,
         PAUSED,
         STOPPED
     }
+
     private StateType state;
 
     private void setState(StateType state) {

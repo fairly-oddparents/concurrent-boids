@@ -15,7 +15,7 @@ public class BoidsModel {
     private final double perceptionRadius;
     private final double avoidRadius;
 
-    public BoidsModel(int nboids,
+    public BoidsModel(int numBoids,
                       double initialSeparationWeight,
                       double initialAlignmentWeight,
                       double initialCohesionWeight,
@@ -33,7 +33,7 @@ public class BoidsModel {
         this.perceptionRadius = perceptionRadius;
         this.avoidRadius = avoidRadius;
         this.boids = new ArrayList<>();
-        this.createBoids(nboids);
+        this.createBoids(numBoids);
     }
 
     private synchronized void createBoids(int amount) {
