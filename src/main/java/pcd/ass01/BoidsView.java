@@ -37,7 +37,7 @@ public class BoidsView implements ChangeListener {
 
 		this.stopButton = new JButton("Stop");
 		this.stopButton.addActionListener(e -> {
-			this.simulator.stopSimulation();
+			this.simulator.stop();
 			this.model.setNumberBoids(inputDialog());
 			this.updatePauseResumeButton(false);
 		});
@@ -76,12 +76,12 @@ public class BoidsView implements ChangeListener {
 		this.isPaused = state;
         if (this.isPaused) {
 			pauseResumeButton.setText("Resume");
-            this.simulator.pauseSimulation();
+            this.simulator.pause();
 			this.stopButton.setEnabled(false);
 
         } else {
 			pauseResumeButton.setText("Pause");
-            this.simulator.resumeSimulation();
+            this.simulator.resume();
 			this.stopButton.setEnabled(true);
         }
     }

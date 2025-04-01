@@ -1,7 +1,5 @@
 package pcd.ass01;
 
-import java.util.Optional;
-
 /**
  * Abstract class representing a Boids simulator.
  */
@@ -57,29 +55,29 @@ public abstract class BoidsController {
     /**
      * Runs the simulation.
      */
-    public abstract void runSimulation();
+    public abstract void run();
 
     /**
      * Pauses the simulation.
      */
-    public void pauseSimulation() {
+    public void pause() {
         System.out.println("Pausing simulation");   //TODO: remove logs
-        this.state.pauseSimulation();
+        this.state.pause();
     }
 
     /**
      * Resumes the simulation.
      */
-    public void resumeSimulation() {
+    public void resume() {
         System.out.println("Resuming simulation");  //TODO: remove logs
-        this.state.resumeSimulation();
+        this.state.resume();
     }
 
     /**
      * Waits for the simulation to start.
      */
-    public void waitForSimulation() {
-        this.state.waitForSimulation();
+    public void awaitRun() {
+        this.state.awaitRun();
     }
 
     /**
@@ -93,8 +91,8 @@ public abstract class BoidsController {
     /**
      * Stops the simulation.
      */
-    public void stopSimulation() {
-        this.state.stopSimulation();
+    public void stop() {
+        this.state.stop();
     }
 
 }

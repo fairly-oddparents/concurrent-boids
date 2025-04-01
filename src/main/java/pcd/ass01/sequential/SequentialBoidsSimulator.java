@@ -10,7 +10,7 @@ public class SequentialBoidsSimulator extends BoidsController {
     }
 
     @Override
-    public void runSimulation() {
+    public void run() {
     	while (true) {
             var t0 = System.currentTimeMillis();
     		var boids = model.getBoids();

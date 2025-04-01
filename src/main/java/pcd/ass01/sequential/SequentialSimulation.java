@@ -19,7 +19,7 @@ public class SequentialSimulation {
     	var view = new BoidsView(sim, model, SCREEN_WIDTH, SCREEN_HEIGHT);
 		model.setNumberBoids(view.inputDialog());
     	sim.attachView(view);
-    	sim.runSimulation();
+    	sim.run();
     }
 
 }

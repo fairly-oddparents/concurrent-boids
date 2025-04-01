@@ -17,9 +17,9 @@ public class MultithreadController extends BoidsController {
     }
 
     @Override
-    public void runSimulation() {
+    public void run() {
         while (true) {
-            super.waitForSimulation();
+            super.awaitRun();
             System.out.println("Starting simulation");  //TODO: remove logs
             Barrier velBarrier = new BarrierImpl(NUM_THREADS);
             Barrier posBarrier = new BarrierImpl(NUM_THREADS + 1);
