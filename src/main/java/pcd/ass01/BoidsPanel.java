@@ -2,20 +2,27 @@ package pcd.ass01;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoidsPanel extends JPanel {
 
 	private final BoidsView view;
-	private final BoidsModel model;
+	private final List<Boid> boids;
     private int framerate;
 
-    public BoidsPanel(BoidsView view, BoidsModel model) {
-    	this.model = model;
+    public BoidsPanel(BoidsView view) {
+    	this.boids = new ArrayList<>();
     	this.view = view;
     }
 
     public void setFrameRate(int framerate) {
     	this.framerate = framerate;
+    }
+
+    public void setBoids (List<Boid> boids) {
+    	this.boids.clear();
+    	this.boids.addAll(boids);
     }
     
     @Override
@@ -23,11 +30,10 @@ public class BoidsPanel extends JPanel {
         super.paintComponent(g);
         setBackground(Color.WHITE);
         
-        var w = view.getWidth();
-        var h = view.getHeight();
-        var envWidth = model.getWidth();
+        var w = this.view.getWidth();
+        var h = this.view.getHeight();
+        var envWidth = this.view.getWidth();
         var xScale = w/envWidth;
-        var boids = model.getBoids();
 
         g.setColor(Color.BLUE);
         for (Boid boid : boids) {

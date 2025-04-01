@@ -53,7 +53,7 @@ public class BoidsView implements ChangeListener {
 
 		cp.add(BorderLayout.NORTH, buttonsPanel);
 
-        boidsPanel = new BoidsPanel(this, model);
+        boidsPanel = new BoidsPanel(this);
 		cp.add(BorderLayout.CENTER, boidsPanel);
 
         JPanel slidersPanel = new JPanel();
@@ -123,6 +123,7 @@ public class BoidsView implements ChangeListener {
 	
 	public void update(int frameRate) {
 		boidsPanel.setFrameRate(frameRate);
+		boidsPanel.setBoids(model.getBoids());
 		boidsPanel.repaint();
 	}
 
