@@ -2,11 +2,17 @@ package pcd.ass01.multithreaded;
 
 import pcd.ass01.multithreaded.api.Barrier;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * An implementation of a barrier for synchronizing threads.
  */
 public class MyBarrier implements Barrier {
 
+    private final Lock mutex;
+    private final Condition broken;
     private final int parties;
     private int count;
 
@@ -15,21 +21,25 @@ public class MyBarrier implements Barrier {
      * @param parties the number of threads that need to reach the barrier
      */
     public MyBarrier(int parties) {
+        this.mutex = new ReentrantLock();
+        this.broken = this.mutex.newCondition();
         this.parties = parties;
         this.count = 0;
     }
 
     @Override
-    public synchronized void await() {
-        if (++this.count == this.parties) {
-            this.count = 0;
-            notifyAll();
-        } else {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+    public void await() {
+        try {
+            this.mutex.lock();
+            if (++this.count < this.parties)
+                broken.await();
+            else {
+                this.count = 0;
+                broken.signalAll();
             }
+        } catch (InterruptedException ignored) {}
+        finally {
+            this.mutex.unlock();
         }
     }
 
