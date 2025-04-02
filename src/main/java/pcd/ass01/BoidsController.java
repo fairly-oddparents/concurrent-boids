@@ -52,14 +52,6 @@ public abstract class BoidsController {
     }
 
     /**
-     * Checks whether the simulation is running or not.
-     * @return true if the simulation is running, false otherwise
-     */
-    public boolean isRunning() {
-        return this.state.isRunning();
-    }
-
-    /**
      * Runs the simulation.
      */
     public abstract void run();
