@@ -3,9 +3,6 @@ package pcd.ass01.taskBased;
 import pcd.ass01.Boid;
 import pcd.ass01.BoidsController;
 import pcd.ass01.BoidsModel;
-import pcd.ass01.multithreaded.BarrierImpl;
-import pcd.ass01.multithreaded.BoidWorker;
-import pcd.ass01.multithreaded.api.Barrier;
 
 import java.util.ArrayList;
 import java.util.List;

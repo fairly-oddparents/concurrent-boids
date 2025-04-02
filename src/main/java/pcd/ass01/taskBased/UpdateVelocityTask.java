@@ -16,7 +16,7 @@ public class UpdateVelocityTask implements Callable<Void> {
     }
 
     @Override
-    public Void call() throws Exception {
+    public Void call(){
         boid.updateVelocity(this.model);
         return null;
     }

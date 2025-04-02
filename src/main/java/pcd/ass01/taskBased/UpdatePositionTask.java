@@ -16,7 +16,7 @@ public class UpdatePositionTask implements Callable<Void> {
     }
 
     @Override
-    public Void call() throws Exception {
+    public Void call(){
         boid.updatePos(this.model);
         return null;
     }
