@@ -30,6 +30,7 @@ public class BoidsModel {
     }
 
     private void createBoids(int amount) {
+        this.boids.set(new ArrayList<>());
         List<Boid> boids = this.boids.get();
         for (int i = 0; i < amount; i++) {
             P2d pos = new P2d(
@@ -46,7 +47,7 @@ public class BoidsModel {
     }
 
     public synchronized List<Boid> getBoids(){
-    	return this.boids.get();
+    	return new ArrayList<>(this.boids.get());
     }
 
     public double getMinX() {
