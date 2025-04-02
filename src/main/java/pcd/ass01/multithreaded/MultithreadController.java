@@ -39,13 +39,6 @@ public class MultithreadController extends BoidsController {
                 posBarrier.await();
             }
             this.removeThreads();
-            while (this.model.getBoids().isEmpty()) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
         }
     }
 
