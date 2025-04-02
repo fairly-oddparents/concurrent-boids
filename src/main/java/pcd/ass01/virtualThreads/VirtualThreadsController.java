@@ -22,6 +22,7 @@ public class VirtualThreadsController extends BoidsController {
     public void run() {
         super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
+            super.awaitRun();
             List<Boid> boids = super.model.getBoids();
             int numBoids = boids.size();
             Barrier velBarrier = new MyBarrier(numBoids);
@@ -30,7 +31,7 @@ public class VirtualThreadsController extends BoidsController {
             for (Boid boid : boids) {
                 Thread.ofVirtual().start(() -> {
                     while (true) {
-                        super.awaitRun();
+                        awaitRun();
                         boid.updateVelocity(super.model);
                         velBarrier.await();
                         boid.updatePos(super.model);
@@ -41,7 +42,7 @@ public class VirtualThreadsController extends BoidsController {
             }
             while (!super.isStopped()) {
                 var t0 = System.currentTimeMillis();
-                velBarrier.await();
+                posBarrier.await();
                 updateView(t0);
                 viewBarrier.await();
             }
