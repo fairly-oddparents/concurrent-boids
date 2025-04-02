@@ -47,7 +47,11 @@ public class BoidsModel {
     }
 
     public synchronized List<Boid> getBoids(){
-    	return new ArrayList<>(this.boids.get());
+        List<Boid> boids = new ArrayList<>();
+        for (Boid b : this.boids.get()) {
+            boids.add(new Boid(b.getPos(), b.getVel()));
+        }
+        return boids;
     }
 
     public double getMinX() {
