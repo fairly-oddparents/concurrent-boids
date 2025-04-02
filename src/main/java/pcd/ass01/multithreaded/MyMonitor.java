@@ -10,8 +10,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * @param <T>
  */
 public class MyMonitor<T> {
-    private Lock mutex;
-    private Condition available;
+    private final Lock mutex;
+    private final Condition available;
     private T value;
     private boolean isSet = false;
 
