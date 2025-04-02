@@ -22,8 +22,8 @@ public class MultithreadController extends BoidsController {
         while (true) {
             super.awaitRun();
             System.out.println("Starting simulation");  //TODO: remove logs
-            Barrier velBarrier = new BarrierImpl(NUM_THREADS);
-            Barrier posBarrier = new BarrierImpl(NUM_THREADS + 1);
+            Barrier velBarrier = new MyBarrier(NUM_THREADS);
+            Barrier posBarrier = new MyBarrier(NUM_THREADS + 1);
             List<Boid> boids = this.model.getBoids();
             int boidsPerWorker = boids.size() / NUM_THREADS;
             for (int i = 0; i < NUM_THREADS; i++) {
