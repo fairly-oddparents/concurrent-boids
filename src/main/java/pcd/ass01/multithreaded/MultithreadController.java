@@ -24,19 +24,21 @@ public class MultithreadController extends BoidsController {
             System.out.println("Starting simulation");  //TODO: remove logs
             Barrier velBarrier = new MyBarrier(NUM_THREADS);
             Barrier posBarrier = new MyBarrier(NUM_THREADS + 1);
+            Barrier viewBarrier = new MyBarrier(NUM_THREADS + 1);
             List<Boid> boids = this.model.getBoids();
             int boidsPerWorker = boids.size() / NUM_THREADS;
             for (int i = 0; i < NUM_THREADS; i++) {
                 int start = i * boidsPerWorker;
                 int end = (i == NUM_THREADS - 1) ? boids.size() : start + boidsPerWorker;
                 List<Boid> subList = boids.subList(start, end);
-                this.workers.add(new BoidWorker(this, this.model, velBarrier, posBarrier, subList));
+                this.workers.add(new BoidWorker(this, this.model, velBarrier, posBarrier, viewBarrier, subList));
             }
             workers.forEach(Thread::start);
             while (!super.isStopped()) {
                 var t0 = System.currentTimeMillis();
-                updateView(t0);
                 posBarrier.await();
+                updateView(t0);
+                viewBarrier.await();
             }
             this.removeThreads();
         }
