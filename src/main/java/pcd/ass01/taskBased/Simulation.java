@@ -4,7 +4,6 @@ package pcd.ass01.taskBased;
 import pcd.ass01.BoidsController;
 import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsView;
-import pcd.ass01.multithreaded.MultithreadController;
 
 public class Simulation {
     private static final int DEFAULT_BOIDS = 0;
