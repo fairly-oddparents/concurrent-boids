@@ -36,11 +36,11 @@ public class BoidsPanel extends JPanel {
         var xScale = w/envWidth;
 
         g.setColor(Color.BLUE);
+        List<Boid> boids = new ArrayList<>(this.boids); // TODO: copy the array to avoid concurrent modification
         for (Boid boid : boids) {
-        	var x = boid.getPos().x();
-        	var y = boid.getPos().y();
-        	int px = (int)((double) w / 2 + x * xScale);
-        	int py = (int)((double) h / 2 - y * xScale);
+        	P2d pos = boid.getPos();
+        	int px = (int)((double) w / 2 + pos.x() * xScale);
+        	int py = (int)((double) h / 2 - pos.y() * xScale);
             g.fillOval(px,py, 5, 5);
         }
         
