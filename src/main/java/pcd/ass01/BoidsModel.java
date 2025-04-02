@@ -30,7 +30,7 @@ public class BoidsModel {
     }
 
     private void createBoids(int amount) {
-        List<Boid> boids = this.boids.get();
+        List<Boid> boids = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             P2d pos = new P2d(
                     -WIDTH / 2 + Math.random() * WIDTH,
