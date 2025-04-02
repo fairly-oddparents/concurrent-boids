@@ -6,6 +6,7 @@ import pcd.ass01.BoidsModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -32,29 +33,29 @@ public class TaskController extends BoidsController {
             for (Boid boid : boids) {
                 this.futures.add(executor.submit(new UpdateVelocityTask(boid, this.model)));
             }
-            for (Future future : futures) {
-                try {
-                    future.get();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            waitFutures(futures);
             futures.clear();
             for (Boid boid : boids) {
                 this.futures.add(executor.submit(new UpdatePositionTask(boid, this.model)));
             }
-            for (Future future : futures) {
-                try {
-                    future.get();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
+            waitFutures(futures);
+            futures.clear();
             var t0 = System.currentTimeMillis();
             updateView(t0);
-
             //TODO: executor.shutdown();
         }
+    }
+
+    private void waitFutures(List<Future> futures){
+        futures.forEach(future -> {
+            try {
+                future.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
     }
 }
