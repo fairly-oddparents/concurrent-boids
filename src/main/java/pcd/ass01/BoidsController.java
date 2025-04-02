@@ -5,7 +5,8 @@ package pcd.ass01;
  */
 public abstract class BoidsController {
 
-    private static final int FRAMERATE = 25;
+    private static final int FRAMERATE = 60;
+    public static final int FRAMERATE_PERIOD = 1000 / FRAMERATE;
     private final State state;
     private BoidsView view;
     private int framerate;
@@ -37,11 +38,9 @@ public abstract class BoidsController {
         view.update(framerate, this.model.getBoids());
         var t1 = System.currentTimeMillis();
         var dtElapsed = t1 - t0;
-        var frameratePeriod = 1000/FRAMERATE;
-
-        if (dtElapsed < frameratePeriod) {
+        if (dtElapsed < FRAMERATE_PERIOD) {
             try {
-                Thread.sleep(frameratePeriod - dtElapsed);
+                Thread.sleep(FRAMERATE_PERIOD - dtElapsed);
             } catch (Exception e) {
                 Thread.currentThread().interrupt();
             }
