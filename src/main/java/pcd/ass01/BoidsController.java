@@ -5,7 +5,7 @@ package pcd.ass01;
  */
 public abstract class BoidsController {
 
-    private static final int FRAMERATE = 25;
+    private static final int FRAMERATE = 60;
     public static final int FRAMERATE_PERIOD = 1000 / FRAMERATE;
     private final State state;
     private BoidsView view;
