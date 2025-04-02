@@ -37,7 +37,9 @@ public class MyBarrier implements Barrier {
                 this.count = 0;
                 broken.signalAll();
             }
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         finally {
             this.mutex.unlock();
         }
