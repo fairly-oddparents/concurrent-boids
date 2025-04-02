@@ -1,115 +1,120 @@
 package pcd.ass01;
 
+import pcd.ass01.multithreaded.MyMonitor;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BoidsModel {
-    
-    private final List<Boid> boids;
-    private double separationWeight; 
-    private double alignmentWeight; 
-    private double cohesionWeight; 
-    private final double width;
-    private final double height;
-    private final double maxSpeed;
-    private final double perceptionRadius;
-    private final double avoidRadius;
 
-    public BoidsModel(int numBoids,
-                      double initialSeparationWeight,
-                      double initialAlignmentWeight,
-                      double initialCohesionWeight,
-                      double width,
-                      double height,
-                      double maxSpeed,
-                      double perceptionRadius,
-                      double avoidRadius) {
-        this.separationWeight = initialSeparationWeight;
-        this.alignmentWeight = initialAlignmentWeight;
-        this.cohesionWeight = initialCohesionWeight;
-        this.width = width;
-        this.height = height;
-        this.maxSpeed = maxSpeed;
-        this.perceptionRadius = perceptionRadius;
-        this.avoidRadius = avoidRadius;
-        this.boids = new ArrayList<>();
+    private static final double SEPARATION_WEIGHT = 1.0;
+    private static final double ALIGNMENT_WEIGHT = 1.0;
+    private static final double COHESION_WEIGHT = 1.0;
+    private static final double WIDTH = 1000;
+    private static final double HEIGHT = 1000;
+    private static final double MAX_SPEED = 4.0;
+    private static final double AVOID_RADIUS = 20.0;
+    private static final double PERCEPTION_RADIUS = 50.0;
+
+    private final MyMonitor<List<Boid>> boids;
+    private final MyMonitor<Double> separationWeight;
+    private final MyMonitor<Double> alignmentWeight;
+    private final MyMonitor<Double> cohesionWeight;
+
+    public BoidsModel(int numBoids) {
+        this.boids = new MyMonitor<>(new ArrayList<>());
+        this.separationWeight = new MyMonitor<>(SEPARATION_WEIGHT);
+        this.alignmentWeight = new MyMonitor<>(ALIGNMENT_WEIGHT);
+        this.cohesionWeight = new MyMonitor<>(COHESION_WEIGHT);
         this.createBoids(numBoids);
     }
 
-    private synchronized void createBoids(int amount) {
+    private void createBoids(int amount) {
+        this.boids.set(new ArrayList<>());
+        List<Boid> boids = this.boids.get();
         for (int i = 0; i < amount; i++) {
-            P2d pos = new P2d(-width/2 + Math.random() * width, -height/2 + Math.random() * height);
-            V2d vel = new V2d(Math.random() * maxSpeed/2 - maxSpeed/4, Math.random() * maxSpeed/2 - maxSpeed/4);
+            P2d pos = new P2d(
+                    -WIDTH / 2 + Math.random() * WIDTH,
+                    -HEIGHT / 2 + Math.random() * HEIGHT
+            );
+            V2d vel = new V2d(
+                    Math.random() * MAX_SPEED / 2 - MAX_SPEED / 4,
+                    Math.random() * MAX_SPEED / 2 - MAX_SPEED / 4
+            );
             boids.add(new Boid(pos, vel));
         }
+        this.boids.set(boids);
     }
 
     public synchronized List<Boid> getBoids(){
-    	return boids;
+        List<Boid> boids = new ArrayList<>();
+        for (Boid b : this.boids.get()) {
+            boids.add(new Boid(b.getPos(), b.getVel()));
+        }
+        return boids;
     }
 
-    public synchronized double getMinX() {
-    	return -width/2;
+    public double getMinX() {
+    	return -WIDTH/2;
     }
 
-    public synchronized double getMaxX() {
-    	return width/2;
+    public double getMaxX() {
+    	return WIDTH/2;
     }
 
-    public synchronized double getMinY() {
-    	return -height/2;
+    public double getMinY() {
+    	return -HEIGHT/2;
     }
 
-    public synchronized double getMaxY() {
-    	return height/2;
+    public double getMaxY() {
+    	return HEIGHT/2;
     }
 
-    public synchronized double getWidth() {
-    	return width;
+    public double getWidth() {
+    	return WIDTH;
     }
 
-    public synchronized double getHeight() {
-    	return height;
+    public double getHeight() {
+    	return HEIGHT;
     }
 
-    public synchronized void setSeparationWeight(double value) {
-    	this.separationWeight = value;
+    public void setSeparationWeight(double value) {
+    	this.separationWeight.set(value);
     }
 
-    public synchronized void setAlignmentWeight(double value) {
-    	this.alignmentWeight = value;
+    public void setAlignmentWeight(double value) {
+    	this.alignmentWeight.set(value);
     }
 
-    public synchronized void setCohesionWeight(double value) {
-    	this.cohesionWeight = value;
+    public void setCohesionWeight(double value) {
+    	this.cohesionWeight.set(value);
     }
 
-    public synchronized double getSeparationWeight() {
-    	return separationWeight;
+    public double getSeparationWeight() {
+    	return this.separationWeight.get();
     }
 
-    public synchronized double getCohesionWeight() {
-    	return cohesionWeight;
+    public double getCohesionWeight() {
+    	return this.cohesionWeight.get();
     }
 
-    public synchronized double getAlignmentWeight() {
-    	return alignmentWeight;
+    public double getAlignmentWeight() {
+    	return this.alignmentWeight.get();
     }
 
-    public synchronized double getMaxSpeed() {
-    	return maxSpeed;
+    public double getMaxSpeed() {
+    	return MAX_SPEED;
     }
 
-    public synchronized double getAvoidRadius() {
-    	return avoidRadius;
+    public double getAvoidRadius() {
+    	return AVOID_RADIUS;
     }
 
-    public synchronized double getPerceptionRadius() {
-    	return perceptionRadius;
+    public double getPerceptionRadius() {
+    	return PERCEPTION_RADIUS;
     }
 
-    public synchronized void setNumberBoids(int amount) {
-        this.boids.clear();
+    public void setNumberBoids(int amount) {
         this.createBoids(amount);
     }
 }
