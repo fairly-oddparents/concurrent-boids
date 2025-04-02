@@ -30,16 +30,15 @@ public class TaskController extends BoidsController {
             super.awaitRun();
             System.out.println("Simulation...");  //TODO: remove logs
             List<Boid> boids = this.model.getBoids();
-            for (Boid boid : boids) {
-                this.futures.add(executor.submit(new UpdateVelocityTask(boid, this.model)));
-            }
+
+            boids.forEach(boid -> this.futures.add(executor.submit(new UpdateVelocityTask(boid, this.model))));
             waitFutures(futures);
             futures.clear();
-            for (Boid boid : boids) {
-                this.futures.add(executor.submit(new UpdatePositionTask(boid, this.model)));
-            }
+
+            boids.forEach(boid -> this.futures.add(executor.submit(new UpdatePositionTask(boid, this.model))));
             waitFutures(futures);
             futures.clear();
+
             var t0 = System.currentTimeMillis();
             updateView(t0);
             //TODO: executor.shutdown();
@@ -50,12 +49,10 @@ public class TaskController extends BoidsController {
         futures.forEach(future -> {
             try {
                 future.get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e); //TODO:
             }
-
         });
     }
+
 }
