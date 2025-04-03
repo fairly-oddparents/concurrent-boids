@@ -20,13 +20,19 @@ public class BoidsView implements ChangeListener {
 	private int width, height;
 	private boolean isPaused;
 
-	public BoidsView(BoidsController controller, int screenWidth, int screenHeight) {
+	public BoidsView(
+			BoidsController controller,
+			int screenWidth,
+			int screenHeight,
+			double logicalWidth,
+			double logicalHeight
+	) {
 		this.controller = controller;
 		this.width = screenWidth;
 		this.height = screenHeight;
 
 		frame = new JFrame("Boids Simulation");
-        frame.setSize(width, height);
+        frame.setSize(screenWidth, screenHeight);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(true);
 
@@ -62,7 +68,7 @@ public class BoidsView implements ChangeListener {
 
 		cp.add(BorderLayout.NORTH, buttonsPanel);
 
-        boidsPanel = new BoidsPanel(this);
+        boidsPanel = new BoidsPanel(this, logicalWidth, logicalHeight);
 		cp.add(BorderLayout.CENTER, boidsPanel);
 
         JPanel slidersPanel = new JPanel();
