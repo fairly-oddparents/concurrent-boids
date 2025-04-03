@@ -1,5 +1,6 @@
-PCD a.y. 2024-2025 - ISI LM UNIBO - Cesena Campus
+![Demo](./docs/images/demo.gif)
 
+PCD a.y. 2024-2025 - ISI LM UNIBO - Cesena Campus
 # Assignment #01 -  Concurrent Boids
 
 v0.9.0-20250308
