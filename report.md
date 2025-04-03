@@ -4,7 +4,7 @@
 
 Giangiulli Chiara (1189567; chiara.giangiulli@studio.unibo.it)  
 Shtini Dilaver (1189997; dilaver.shtini@studio.unibo.it)  
-Terenzi Mirco (0001193420; mirco.terenzi@studio.unibo.it)  
+Terenzi Mirco (1193420; mirco.terenzi@studio.unibo.it)  
 10 Aprile 2025
 
 </div>
