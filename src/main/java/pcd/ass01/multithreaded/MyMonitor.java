@@ -36,9 +36,9 @@ public class MyMonitor<T> {
      * Sets the value of the monitor.
      * @param value the value to set
      */
-    public synchronized void set(T value) {
+    public void set(T value) {
+        this.mutex.lock();
         try {
-            this.mutex.lock();
             this.value = value;
             this.isSet = true;
             this.available.signalAll();
@@ -51,13 +51,16 @@ public class MyMonitor<T> {
      * Gets the value of the monitor.
      * @return the value of the monitor
      */
-    public synchronized T get() {
+    public T get() {
         try {
             mutex.lock();
-            if (!isSet){
+            while (!isSet){
                 try {
                     available.await();
-                } catch (InterruptedException ignored) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
             return value;
         } finally {
