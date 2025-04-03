@@ -32,15 +32,17 @@ public class TaskController extends BoidsController {
             List<Boid> boids = this.model.getBoids();
 
             boids.forEach(boid -> this.futures.add(executor.submit(new UpdateVelocityTask(boid, this.model))));
+            var t0 = System.currentTimeMillis();
             waitFutures(futures);
+            updateView(t0);
             futures.clear();
 
             boids.forEach(boid -> this.futures.add(executor.submit(new UpdatePositionTask(boid, this.model))));
+            t0 = System.currentTimeMillis();
             waitFutures(futures);
+            updateView(t0);
             futures.clear();
 
-            var t0 = System.currentTimeMillis();
-            updateView(t0);
             //TODO: executor.shutdown();
         }
     }
