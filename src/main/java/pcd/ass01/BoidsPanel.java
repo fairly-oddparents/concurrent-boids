@@ -13,7 +13,6 @@ public class BoidsPanel extends JPanel {
     private int framerate;
 
     public BoidsPanel(BoidsView view, double logicalWidth, double logicalHeight) {
-        this.setPreferredSize(new Dimension((int) logicalWidth, (int) logicalHeight));
         this.boids = new ArrayList<>();
         this.view = view;
         this.logicalWidth = logicalWidth;
