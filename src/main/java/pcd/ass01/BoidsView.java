@@ -32,7 +32,6 @@ public class BoidsView implements ChangeListener {
 		this.height = screenHeight;
 
 		frame = new JFrame("Boids Simulation");
-        frame.setSize(screenWidth, screenHeight);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(true);
 
@@ -87,6 +86,7 @@ public class BoidsView implements ChangeListener {
 		cp.add(BorderLayout.SOUTH, slidersPanel);
 
         frame.setContentPane(cp);
+		frame.pack();
         frame.setVisible(true);
     }
 
