@@ -3,8 +3,6 @@ package pcd.ass01;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.List;
 
 import java.awt.*;
@@ -17,7 +15,6 @@ public class BoidsView implements ChangeListener {
     private final JButton pauseButton, stopButton;
 	private final JSlider cohesionSlider, separationSlider, alignmentSlider;
 	private final BoidsController controller;
-	private int width, height;
 	private boolean isPaused;
 
 	public BoidsView(
@@ -27,23 +24,12 @@ public class BoidsView implements ChangeListener {
 	) {
 		this.controller = controller;
 		var dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.width = this.height = Math.min(dim.width, dim.height) * 4 / 5;
+		int side = Math.min(dim.width, dim.height) * 4 / 5;
 
 		frame = new JFrame("Boids Simulation");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(width, height);
+		frame.setSize(side, side);
 		frame.setResizable(true);
-
-		frame.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				int w = frame.getWidth();
-				int h = w * getHeight() / getWidth();
-				frame.setSize(w, h);
-				width = w;
-				height = h;
-			}
-		});
 
 		JPanel cp = new JPanel();
 		LayoutManager layout = new BorderLayout();
@@ -154,11 +140,11 @@ public class BoidsView implements ChangeListener {
 	}
 	
 	public int getWidth() {
-		return width;
+		return frame.getWidth();
 	}
 
 	public int getHeight() {
-		return height;
+		return frame.getHeight();
 	}
 
 }
