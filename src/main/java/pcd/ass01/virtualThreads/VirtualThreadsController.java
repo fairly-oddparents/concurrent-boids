@@ -32,7 +32,8 @@ public class VirtualThreadsController extends BoidsController {
                 Thread.ofVirtual().start(() -> {
                     while (true) {
                         awaitRun();
-                        boid.updateVelocity(super.model);
+                        boid.readVelocity(super.model);
+                        boid.updateVelocity();
                         velBarrier.await();
                         boid.updatePos(super.model);
                         posBarrier.await();

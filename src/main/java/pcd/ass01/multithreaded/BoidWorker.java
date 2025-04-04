@@ -9,7 +9,7 @@ import java.util.List;
 
 public class BoidWorker extends Thread{
 
-    private final Barrier velBarrier, posBarrier, viewBarrier;
+    private final Barrier velComputed, boidsUpdated, velUpdated;
     private final BoidsController controller;
     private final BoidsModel model;
     private final List<Boid> boids;
@@ -18,16 +18,16 @@ public class BoidWorker extends Thread{
     public BoidWorker(
             BoidsController controller,
             BoidsModel model,
-            Barrier velBarrier,
-            Barrier posBarrier,
-            Barrier viewBarrier,
+            Barrier velComputed,
+            Barrier velUpdated,
+            Barrier boidsUpdated,
             List<Boid> boids
     ) {
         this.controller = controller;
         this.model = model;
-        this.velBarrier = velBarrier;
-        this.posBarrier = posBarrier;
-        this.viewBarrier = viewBarrier;
+        this.velComputed = velComputed;
+        this.velUpdated = velUpdated;
+        this.boidsUpdated = boidsUpdated;
         this.boids = boids;
     }
 
@@ -36,14 +36,17 @@ public class BoidWorker extends Thread{
         while (!Thread.interrupted()) {
             this.controller.awaitRun();
             for (Boid boid : this.boids) {
-                boid.updateVelocity(model);
+                boid.readVelocity(model);
             }
-            velBarrier.await();
+            velComputed.await();
+            for (Boid boid : this.boids) {
+                boid.updateVelocity();
+            }
+            velUpdated.await();
             for (Boid boid : this.boids) {
                 boid.updatePos(model);
             }
-            posBarrier.await();
-            viewBarrier.await();
+            boidsUpdated.await();
         }
     }
 }
