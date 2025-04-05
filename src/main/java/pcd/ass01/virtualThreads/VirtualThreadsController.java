@@ -23,6 +23,7 @@ public class VirtualThreadsController extends BoidsController {
 
     @Override
     public void run() {
+        int iteration = 0;
         super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
             super.awaitRun();
@@ -44,12 +45,15 @@ public class VirtualThreadsController extends BoidsController {
                     }
                 });
             }
-            while (!super.isStopped()) {
+            //while (!super.isStopped()) {
+            while (iteration < 1000) {
                 var t0 = System.currentTimeMillis();
                 posBarrier.await();
                 updateView(t0);
                 viewBarrier.await();
+                iteration++;
             }
+            break;
         }
     }
 

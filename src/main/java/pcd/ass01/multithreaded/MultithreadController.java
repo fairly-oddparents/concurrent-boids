@@ -26,6 +26,7 @@ public class MultithreadController extends BoidsController {
 
     @Override
     public void run() {
+        int iteration = 0;
         super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
             super.awaitRun();
@@ -41,12 +42,15 @@ public class MultithreadController extends BoidsController {
                 this.workers.add(new BoidWorker(this, this.model, velComputed, velUpdated, boidsUpdated, subList));
             }
             workers.forEach(Thread::start);
-            while (!super.isStopped()) {
+            //while (!super.isStopped()) {
+            while (iteration < 1000) {
                 var t0 = System.currentTimeMillis();
                 boidsUpdated.await();
                 updateView(t0);
+                iteration++;
             }
             this.removeThreads();
+            break;
         }
     }
 

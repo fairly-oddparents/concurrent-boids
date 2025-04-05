@@ -32,11 +32,11 @@ public class TaskController extends BoidsController {
 
     @Override
     public void run() {
+        int iteration = 0;
         super.model.setNumberBoids(super.getNumberOfBoids());
-        while (true) {
+        while (iteration < 1000) {
             super.awaitRun();
             List<Boid> boids = this.model.getBoids();
-
             boids.forEach(boid -> this.futures.add(executor.submit(new UpdateVelocityTask(boid, this.model))));
             var t0 = System.currentTimeMillis();
             waitFutures(futures);
@@ -47,6 +47,7 @@ public class TaskController extends BoidsController {
             futures.clear();
             updateView(t0);
 
+            iteration++;
             //TODO: executor.shutdown();
         }
     }
