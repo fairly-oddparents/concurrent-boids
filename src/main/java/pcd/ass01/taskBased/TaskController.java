@@ -15,7 +15,7 @@ public class TaskController extends BoidsController {
 
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private final ExecutorService executor;
-    private List<Future> futures;
+    private final List<Future<Void>> futures;
 
     public TaskController(BoidsModel model) {
         super(model);
@@ -44,7 +44,7 @@ public class TaskController extends BoidsController {
         }
     }
 
-    private void waitFutures(List<Future> futures){
+    private void waitFutures(List<Future<Void>> futures){
         futures.forEach(future -> {
             try {
                 future.get();
