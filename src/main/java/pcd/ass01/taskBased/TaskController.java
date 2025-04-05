@@ -28,7 +28,6 @@ public class TaskController extends BoidsController {
         super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
             super.awaitRun();
-            System.out.println("Simulation...");  //TODO: remove logs
             List<Boid> boids = this.model.getBoids();
 
             boids.forEach(boid -> this.futures.add(executor.submit(new UpdateVelocityTask(boid, this.model))));

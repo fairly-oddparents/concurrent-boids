@@ -22,7 +22,6 @@ public class MultithreadController extends BoidsController {
         super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
             super.awaitRun();
-            System.out.println("Starting simulation");  //TODO: remove logs
             Barrier velComputed = new MyBarrier(NUM_THREADS);
             Barrier velUpdated = new MyBarrier(NUM_THREADS);
             Barrier boidsUpdated = new MyBarrier(NUM_THREADS + 1);
@@ -48,7 +47,6 @@ public class MultithreadController extends BoidsController {
         for (Thread thread : workers) {
             thread.interrupt();
         }
-        System.out.println("All threads killed");   //TODO: remove logs
         workers.clear();
     }
 }
