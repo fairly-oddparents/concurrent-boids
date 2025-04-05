@@ -4,11 +4,18 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.util.List;
-
 import java.awt.*;
 import java.util.Hashtable;
 
+/**
+ * The BoidsView class is responsible for creating the graphical user interface (GUI) for the Boids simulation.
+ * It allows users to interact with the simulation, including starting, pausing, and stopping it.
+ * The view also provides sliders to adjust the weights of the boids behaviors (cohesion, separation, and alignment).
+ */
 public class BoidsView implements ChangeListener {
+
+	private final static Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+	private final static int SIDE_SIZE = Math.min(SCREEN_SIZE.width, SCREEN_SIZE.height) * 4 / 5;
 
 	private final JFrame frame;
 	private final BoidsPanel boidsPanel;
@@ -17,75 +24,84 @@ public class BoidsView implements ChangeListener {
 	private final BoidsController controller;
 	private boolean isPaused;
 
-	public BoidsView(
-			BoidsController controller,
-			double logicalWidth,
-			double logicalHeight
-	) {
+	/**
+	 * Constructor for the BoidsView class.
+	 * @param controller the BoidsController instance that manages the simulation
+	 * @param logicalWidth the logical width of the simulation area
+	 * @param logicalHeight the logical height of the simulation area
+	 */
+	public BoidsView(BoidsController controller, double logicalWidth, double logicalHeight) {
 		this.controller = controller;
-		var dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int side = Math.min(dim.width, dim.height) * 4 / 5;
-
-		frame = new JFrame("Boids Simulation");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(side, side);
-		frame.setResizable(true);
+		this.frame = setFrame();
 
 		JPanel cp = new JPanel();
-		LayoutManager layout = new BorderLayout();
-		cp.setLayout(layout);
+		cp.setLayout(new BorderLayout());
 
+		// Create a panel for the buttons (stop and pause/resume)
 		JPanel buttonsPanel = new JPanel();
-
 		this.stopButton = new JButton("Stop");
 		this.stopButton.addActionListener(e -> this.controller.stop());
-		pauseButton = new JButton("Pause");
-		pauseButton.addActionListener(e -> {
+		this.pauseButton = new JButton("Pause");
+		this.pauseButton.addActionListener(e -> {
 			if (this.isPaused)
 				this.controller.resume();
 			else
 				this.controller.pause();
 		});
-
-		buttonsPanel.add(stopButton);
-		buttonsPanel.add(pauseButton);
-
+		buttonsPanel.add(this.stopButton);
+		buttonsPanel.add(this.pauseButton);
 		cp.add(BorderLayout.NORTH, buttonsPanel);
 
-        boidsPanel = new BoidsPanel(this, logicalWidth, logicalHeight);
+		// Create a panel for the boids
+		this.boidsPanel = new BoidsPanel(this, logicalWidth, logicalHeight);
 		cp.add(BorderLayout.CENTER, boidsPanel);
 
+		// Create a panel for the sliders
         JPanel slidersPanel = new JPanel();
-
-        cohesionSlider = makeSlider();
-        separationSlider = makeSlider();
-        alignmentSlider = makeSlider();
-
+		this.cohesionSlider = makeSlider();
+		this.separationSlider = makeSlider();
+		this.alignmentSlider = makeSlider();
         slidersPanel.add(new JLabel("Separation"));
-        slidersPanel.add(separationSlider);
+		slidersPanel.add(this.separationSlider);
         slidersPanel.add(new JLabel("Alignment"));
-        slidersPanel.add(alignmentSlider);
+		slidersPanel.add(this.alignmentSlider);
         slidersPanel.add(new JLabel("Cohesion"));
-        slidersPanel.add(cohesionSlider);
-
+		slidersPanel.add(this.cohesionSlider);
 		cp.add(BorderLayout.SOUTH, slidersPanel);
 
-        frame.setContentPane(cp);
-        frame.setVisible(true);
+        this.frame.setContentPane(cp);
+        this.frame.setVisible(true);
     }
 
+	private JFrame setFrame() {
+		final JFrame frame;
+		frame = new JFrame("Boids Simulation");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(SIDE_SIZE, SIDE_SIZE);
+		frame.setResizable(true);
+		return frame;
+	}
+
+	/**
+	 * Sets the state of the pause button and updates its text accordingly.
+	 * @param state true if the simulation is paused, false otherwise
+	 */
 	public void setPauseButtonState(boolean state) {
 		this.isPaused = state;
         if (this.isPaused) {
-			pauseButton.setText("Resume");
+			this.pauseButton.setText("Resume");
 			this.stopButton.setEnabled(false);
 
         } else {
-			pauseButton.setText("Pause");
+			this.pauseButton.setText("Pause");
 			this.stopButton.setEnabled(true);
         }
     }
 
+	/**
+	 * Displays an input dialog to the user to enter the number of boids.
+	 * @return the number of boids entered by the user
+	 */
 	public Integer inputDialog() {
 		String input;
 		do {
@@ -118,33 +134,46 @@ public class BoidsView implements ChangeListener {
         slider.addChangeListener(this);
 		return slider;
 	}
-	
+
+	/**
+	 * Updates the boids panel with the current frame rate and the list of boids.
+	 * @param frameRate the current frame rate of the simulation
+	 * @param boids the list of boids to be displayed
+	 */
 	public void update(int frameRate, List<Boid> boids) {
-		boidsPanel.setFrameRate(frameRate);
-		boidsPanel.setBoids(boids);
-		boidsPanel.repaint();
+		this.boidsPanel.setFrameRate(frameRate);
+		this.boidsPanel.setBoids(boids);
+		this.boidsPanel.repaint();
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		if (e.getSource() == separationSlider) {
-			var val = separationSlider.getValue();
+		if (e.getSource() == this.separationSlider) {
+			var val = this.separationSlider.getValue();
 			this.controller.setSeparationWeight(0.1*val);
-		} else if (e.getSource() == cohesionSlider) {
-			var val = cohesionSlider.getValue();
+		} else if (e.getSource() == this.cohesionSlider) {
+			var val = this.cohesionSlider.getValue();
 			this.controller.setCohesionWeight(0.1*val);
 		} else {
-			var val = alignmentSlider.getValue();
+			var val = this.alignmentSlider.getValue();
 			this.controller.setAlignmentWeight(0.1*val);
 		}
 	}
-	
+
+	/**
+	 * Returns the current width of the frame.
+	 * @return the width of the frame
+	 */
 	public int getWidth() {
-		return frame.getWidth();
+		return this.frame.getWidth();
 	}
 
+	/**
+	 * Returns the current height of the frame.
+	 * @return the height of the frame
+	 */
 	public int getHeight() {
-		return frame.getHeight();
+		return this.frame.getHeight();
 	}
 
 }
