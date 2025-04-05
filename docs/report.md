@@ -9,27 +9,27 @@ Terenzi Mirco (1193420; mirco.terenzi@studio.unibo.it)
 
 </div>
 
-## Table of Contents
+## Indice
 
-- [Problem Analysis](#problem-analysis)
-- [Design and Architecture](#design-and-architecture)
-- [System Behaviour](#system-behaviour)
+- [Analisi del problema](#analisi-del-problema)
+- [Design e Architettura](#design-e-architettura)
+- [Comportamento del sistema](#comportamento-del-sistema)
 - [Performance](#performance)
-- [Verification](#verification)
+- [Verifica](#verifica)
 
-## Problem Analysis
+## Analisi del problema
 A brief analysis of the problem, focusing on particular aspects that are relevant from a concurrent point of view.
 
-## Design and Architecture
+## Design e Architettura
 A description of the adopted design, strategy, and architecture.
 
-## System Behaviour
+## Comportamento del sistema
 A description of the behaviour of the system using one or multiple Petri Nets, choosing the proper level of abstraction.
 
 ## Performance
 Performance tests to analyze and discuss the performance of the programs (for each version) compared to the sequential version.
 
-## Verification
+## Verifica
 Verification of the program (a model of it) using JPF. For this point, only the Java multithreaded programming version may be considered.
 <pre>
 <b>./gradlew runAssignment01Verify</b>
