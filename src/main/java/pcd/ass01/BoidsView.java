@@ -1,5 +1,7 @@
 package pcd.ass01;
 
+import pcd.ass01.api.View;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -12,7 +14,7 @@ import java.util.Hashtable;
  * It allows users to interact with the simulation, including starting, pausing, and stopping it.
  * The view also provides sliders to adjust the weights of the boids behaviors (cohesion, separation, and alignment).
  */
-public class BoidsView implements ChangeListener {
+public class BoidsView implements ChangeListener, View {
 
 	private final static Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 	private final static int SIDE_SIZE = Math.min(SCREEN_SIZE.width, SCREEN_SIZE.height) * 4 / 5;
@@ -82,11 +84,8 @@ public class BoidsView implements ChangeListener {
 		return frame;
 	}
 
-	/**
-	 * Sets the state of the pause button and updates its text accordingly.
-	 * @param state true if the simulation is paused, false otherwise
-	 */
-	public void setPauseButtonState(boolean state) {
+	@Override
+	public void setPauseState(boolean state) {
 		this.isPaused = state;
         if (this.isPaused) {
 			this.pauseButton.setText("Resume");
@@ -98,11 +97,8 @@ public class BoidsView implements ChangeListener {
         }
     }
 
-	/**
-	 * Displays an input dialog to the user to enter the number of boids.
-	 * @return the number of boids entered by the user
-	 */
-	public Integer inputDialog() {
+	@Override
+	public Integer getBoidCountFromUser() {
 		String input;
 		do {
 			input = JOptionPane.showInputDialog(
@@ -135,11 +131,7 @@ public class BoidsView implements ChangeListener {
 		return slider;
 	}
 
-	/**
-	 * Updates the boids panel with the current frame rate and the list of boids.
-	 * @param frameRate the current frame rate of the simulation
-	 * @param boids the list of boids to be displayed
-	 */
+	@Override
 	public void update(int frameRate, List<Boid> boids) {
 		this.boidsPanel.setFrameRate(frameRate);
 		this.boidsPanel.setBoids(boids);
@@ -160,18 +152,12 @@ public class BoidsView implements ChangeListener {
 		}
 	}
 
-	/**
-	 * Returns the current width of the frame.
-	 * @return the width of the frame
-	 */
+	@Override
 	public int getWidth() {
 		return this.frame.getWidth();
 	}
 
-	/**
-	 * Returns the current height of the frame.
-	 * @return the height of the frame
-	 */
+	@Override
 	public int getHeight() {
 		return this.frame.getHeight();
 	}

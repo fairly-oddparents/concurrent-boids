@@ -1,5 +1,7 @@
 package pcd.ass01;
 
+import pcd.ass01.api.View;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -7,12 +9,12 @@ import java.util.List;
 
 public class BoidsPanel extends JPanel {
 
-    private final BoidsView view;
+    private final View view;
     private final List<Boid> boids;
     private final double logicalWidth, logicalHeight;
     private int framerate;
 
-    public BoidsPanel(BoidsView view, double logicalWidth, double logicalHeight) {
+    public BoidsPanel(View view, double logicalWidth, double logicalHeight) {
         this.boids = new ArrayList<>();
         this.view = view;
         this.logicalWidth = logicalWidth;

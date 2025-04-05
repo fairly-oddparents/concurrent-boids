@@ -1,5 +1,7 @@
 package pcd.ass01;
 
+import pcd.ass01.api.View;
+
 /**
  * Abstract class representing the controller (from MVC architecture) for the Boids simulation.
  */
@@ -8,7 +10,7 @@ public abstract class BoidsController {
     private static final int FRAMERATE = 60;
     public static final int FRAMERATE_PERIOD = 1000 / FRAMERATE;
     private final State state;
-    private BoidsView view;
+    private View view;
     private int framerate;
 
     protected final BoidsModel model;
@@ -26,7 +28,7 @@ public abstract class BoidsController {
      * Attaches the view to the controller.
      * @param view the view to attach
      */
-    public void attachView(BoidsView view) {
+    public void attachView(View view) {
         this.view = view;
     }
 
@@ -61,7 +63,7 @@ public abstract class BoidsController {
     public void pause() {
         System.out.println("Pausing simulation");   //TODO: remove logs
         this.state.pause();
-        this.view.setPauseButtonState(true);
+        this.view.setPauseState(true);
     }
 
     /**
@@ -70,7 +72,7 @@ public abstract class BoidsController {
     public void resume() {
         System.out.println("Resuming simulation");  //TODO: remove logs
         this.state.resume();
-        this.view.setPauseButtonState(false);
+        this.view.setPauseState(false);
     }
 
     /**
@@ -93,7 +95,7 @@ public abstract class BoidsController {
      * @return the number of boids
      */
     public int getNumberOfBoids() {
-        return this.view.inputDialog();
+        return this.view.getBoidCountFromUser();
     }
 
     /**

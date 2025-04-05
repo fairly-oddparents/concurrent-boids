@@ -3,6 +3,7 @@ package pcd.ass01.taskBased;
 import pcd.ass01.BoidsController;
 import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsView;
+import pcd.ass01.api.View;
 
 public class Simulation {
 
@@ -11,7 +12,7 @@ public class Simulation {
     public static void main(String[] args) {
         BoidsModel model = new BoidsModel(DEFAULT_BOIDS);
         BoidsController controller = new TaskController(model);
-        BoidsView view = new BoidsView(controller, model.getWidth(), model.getHeight());
+        View view = new BoidsView(controller, model.getWidth(), model.getHeight());
         controller.attachView(view);
         controller.run();
     }
