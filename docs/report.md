@@ -18,7 +18,20 @@ Terenzi Mirco (1193420; mirco.terenzi@studio.unibo.it)
 - [Verifica](#verifica)
 
 ## Analisi del problema
-A brief analysis of the problem, focusing on particular aspects that are relevant from a concurrent point of view.
+Il problema affrontato in questo assignment è la simulazione del comportamento collettivo di boids, entità autonome che si muovono in uno spazio bidimensionale seguendo tre regole: separazione, allineamento e coesione, come introdotto da Craig Reynolds nel 1986.
+
+Ogni boid, ad ogni iterazione del ciclo di simulazione, deve:
+
+- Analizzare la posizione e velocità di tutti gli altri boid che lo circondano.
+- Calcolare la nuova velocità e aggiornare la propria posizione.
+
+La programmazione concorrente permette di parallelizzare questi aggiornamenti, ma alcuni aspetti richiedono particolare attenzione:
+
+- Le velocità e le posizioni di ogni boid sono calcolate in base a quelle dei suoi vicini, bisogna quindi gestire in modo sicuro l'accesso concorrente ai dati condivisi.
+- Le fasi di calcolo e aggiornamento devono essere sincronizzate per evitare letture/scritture inconsistenti.
+- Per un corretto calcolo della nuova posizione dei boid, è necessario che sia prima calcolata e aggiornata la velocità.
+- L'intefaccia utente deve essere reattiva e sincronizzarsi con l'aggiornamento dei boids.
+
 
 ## Design e Architettura
 A description of the adopted design, strategy, and architecture.
