@@ -1,6 +1,6 @@
-package pcd.ass01.multithreaded;
+package pcd.ass01;
 
-import pcd.ass01.multithreaded.api.Barrier;
+import pcd.ass01.api.Barrier;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;

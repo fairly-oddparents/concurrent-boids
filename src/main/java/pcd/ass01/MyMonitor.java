@@ -1,4 +1,4 @@
-package pcd.ass01.multithreaded;
+package pcd.ass01;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;

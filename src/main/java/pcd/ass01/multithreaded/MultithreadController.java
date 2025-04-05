@@ -3,7 +3,8 @@ package pcd.ass01.multithreaded;
 import pcd.ass01.Boid;
 import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsController;
-import pcd.ass01.multithreaded.api.Barrier;
+import pcd.ass01.MyBarrier;
+import pcd.ass01.api.Barrier;
 
 import java.util.LinkedList;
 import java.util.List;

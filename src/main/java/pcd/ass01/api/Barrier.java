@@ -1,4 +1,4 @@
-package pcd.ass01.multithreaded.api;
+package pcd.ass01.api;
 
 /**
  * Barrier interface for synchronizing threads.

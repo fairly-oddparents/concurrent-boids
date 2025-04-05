@@ -1,7 +1,5 @@
 package pcd.ass01;
 
-import pcd.ass01.multithreaded.MyMonitor;
-
 import java.util.ArrayList;
 import java.util.List;
 
