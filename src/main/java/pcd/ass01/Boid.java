@@ -3,24 +3,44 @@ package pcd.ass01;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class representing a boid in the simulation.
+ */
 public class Boid {
 
     private P2d pos;
     private V2d vel, updatedVel;
 
+    /**
+     * Constructor for the Boid class.
+     * @param pos the position of the boid
+     * @param vel the velocity of the boid
+     */
     public Boid(P2d pos, V2d vel) {
         this.pos = pos;
         this.vel = vel;
     }
 
+    /**
+     * Gets the position of the boid.
+     * @return the position of the boid
+     */
     public P2d getPos() {
         return pos;
     }
 
+    /**
+     * Gets the velocity of the boid.
+     * @return the velocity of the boid
+     */
     public V2d getVel() {
         return vel;
     }
 
+    /**
+     * Reads the velocity of the boid based on the nearby boids.
+     * @param model the model
+     */
     public void readVelocity(BoidsModel model) {
         List<Boid> nearbyBoids = getNearbyBoids(model);
         V2d separation = calculateSeparation(nearbyBoids, model.getAvoidRadius());
@@ -35,10 +55,17 @@ public class Boid {
         }
     }
 
+    /**
+     * Updates the velocity of the boid.
+     */
     public void updateVelocity() {
         this.vel = this.updatedVel;
     }
 
+    /**
+     * Updates the position of the boid based on its velocity.
+     * @param model the model
+     */
     public void updatePos(BoidsModel model) {
         pos = pos.sum(vel);
         if (pos.x() < model.getMinX()) pos = pos.sum(new V2d(model.getWidth(), 0));

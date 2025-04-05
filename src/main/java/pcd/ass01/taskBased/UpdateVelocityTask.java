@@ -5,11 +5,19 @@ import pcd.ass01.BoidsModel;
 
 import java.util.concurrent.Callable;
 
+/**
+ * Task for updating the velocity of a boid.
+ */
 public class UpdateVelocityTask implements Callable<Void> {
 
     private final Boid boid;
     private final BoidsModel model;
 
+    /**
+     * Constructor for the UpdateVelocityTask.
+     * @param boid the boid to update
+     * @param model the model
+     */
     public UpdateVelocityTask(Boid boid, BoidsModel model) {
         this.boid = boid;
         this.model = model;

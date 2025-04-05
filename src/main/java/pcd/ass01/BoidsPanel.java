@@ -7,6 +7,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Panel for displaying the boids simulation.
+ */
 public class BoidsPanel extends JPanel {
 
     private final View view;
@@ -14,6 +17,12 @@ public class BoidsPanel extends JPanel {
     private final double logicalWidth, logicalHeight;
     private int framerate;
 
+    /**
+     * Constructor for the BoidsPanel.
+     * @param view the view
+     * @param logicalWidth the logical width
+     * @param logicalHeight the logical height
+     */
     public BoidsPanel(View view, double logicalWidth, double logicalHeight) {
         this.boids = new ArrayList<>();
         this.view = view;
@@ -21,10 +30,18 @@ public class BoidsPanel extends JPanel {
         this.logicalHeight = logicalHeight;
     }
 
+    /**
+     * Sets the framerate.
+     * @param framerate the framerate
+     */
     public void setFrameRate(int framerate) {
         this.framerate = framerate;
     }
 
+    /**
+     * Sets the boids.
+     * @param boids the list of boids
+     */
     public void setBoids (List<Boid> boids) {
         this.boids.clear();
         this.boids.addAll(boids);

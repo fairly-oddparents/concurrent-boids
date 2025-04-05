@@ -5,6 +5,9 @@ import pcd.ass01.BoidsModel;
 import pcd.ass01.BoidsView;
 import pcd.ass01.api.View;
 
+/**
+ * Entry-point for the virtual threads version of the boids simulation.
+ */
 public class Simulation {
 
     private static final int DEFAULT_BOIDS = 0;

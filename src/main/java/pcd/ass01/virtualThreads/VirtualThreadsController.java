@@ -8,6 +8,9 @@ import pcd.ass01.api.Barrier;
 
 import java.util.List;
 
+/**
+ * Controller for the virtual threads boids simulation.
+ */
 public class VirtualThreadsController extends BoidsController {
 
     /**

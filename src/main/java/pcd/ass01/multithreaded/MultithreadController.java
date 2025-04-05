@@ -9,10 +9,17 @@ import pcd.ass01.api.Barrier;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Controller for the multithreaded boids simulation.
+ */
 public class MultithreadController extends BoidsController {
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private final LinkedList<Thread> workers = new LinkedList<>();
 
+    /**
+     * Constructor for the MultithreadController.
+     * @param model the model
+     */
     public MultithreadController(BoidsModel model) {
         super(model);
     }
@@ -43,7 +50,7 @@ public class MultithreadController extends BoidsController {
         }
     }
 
-    public synchronized void removeThreads() {
+    private synchronized void removeThreads() {
         for (Thread thread : workers) {
             thread.interrupt();
         }
