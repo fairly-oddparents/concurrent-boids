@@ -34,7 +34,38 @@ La programmazione concorrente permette di parallelizzare questi aggiornamenti, m
 
 
 ## Design e Architettura
-A description of the adopted design, strategy, and architecture.
+
+Il progetto è stato strutturato seguendo il pattern MVC (Model-View-Controller), con una netta separazione tra logica della simulazione, interfaccia utente e controllo dell'esecuzione:
+
+- **Model** (_BoidsModel_): contiene la logica della simulazione dei boid. Gestisce la lista dei boid, aggiorna le loro posizioni e velocità secondo le regole di comportamento (separazione, coesione, allineamento).
+  Per ciascuna versione è stata poi sviluppata un’estensione del modello che implementa la logica specifica del parallelismo.
+- **View** (_BoidsPanel_, _BoidsView_): componente Swing responsabile della rappresentazione grafica dei boid e dell'interazione con l'utente. Fornisce i controlli richiesti (start, stop, pause, sliders, input numerico).
+
+- **Controller** (_BoidsController_): gestisce il ciclo di vita della simulazione e funge da ponte tra la vista e il modello. In base alla versione selezionata, avvia il motore di simulazione corretto.
+
+Questo approccio ha permesso una gestione modulare e flessibile delle diverse versioni concorrenti della simulazione.
+
+### Versione Multithread
+In questa versione, ogni boid è stato inizialmente associato ad un thread dedicato. Tuttavia, questa soluzione è stata ritenuta troppo onerosa, in quanto limitata al numero di core della CPU utilizzata, e si è passati ad una suddivisione del gruppo di boids nei thread possibili.
+
+L'implementazione di una Barriera ha permesso di gestire la sincronizzazione tra l'aggiornamento delle velocità e delle posizioni: permette di attendere che tutti i thread abbiano terminato di aggiornare le velocità prima di passare all'aggiornamento delle posizioni.
+Per evitare, inoltre, un accesso concorrente alle risorse è stata suddivisa la lettura e il calcolo delle velocità dal loro effettivo aggiornamento, questo per tutti i boid, grazie all'utilizzo di una barriera, per garantire modifiche consistenti ed evitare race conditions.
+La view viene aggiornata di conseguenza una volta ultimata la modifica delle posizioni da parte di tutti i thread.
+
+Attraverso l'utilizzo di un Monitor, che richiede l'acquisizione di un lock per la modifica e la lettura di un valore (_ReentrantLock_ e _Condition_), è stata garantita la mutua esclusione nell'aggiornamento del peso delle tre regole quando l'utente interagisce con gli sliders.
+
+//TODO: settaggio stato (stop/pause/resume)
+
+### Versione Task-based
+Questa versione sfrutta un thread pool fisso (di dimensione pari al numero di core del sistema più uno), creato tramite _ExecutorService_. 
+All'inizio di ogni simulazione, viene creato un insieme di task paralleli (uno per ciascun boid).
+Un gruppo di task ha il compito di aggiornare le velocità, mentre l'altro ha il compito di aggiornare le posizioni.
+La sincronizzazione è stata gestita sfruttando il framework _Executor_ che permette di ottenere i risultati dei task come _Future_. 
+Questo permette di attendere il completamento del lavoro dei task prima di procedere.
+
+### Versione Virtual Thread
+//TODO
+
 
 ## Comportamento del sistema
 A description of the behaviour of the system using one or multiple Petri Nets, choosing the proper level of abstraction.
