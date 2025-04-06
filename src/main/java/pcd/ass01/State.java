@@ -1,7 +1,8 @@
 package pcd.ass01;
 
 /**
- * This class is a monitor that manage the state of the simulation.
+ * This class is a monitor that manage the state of the simulation (running, paused, stopped).
+ * When instantiated, the simulation is in running state.
  */
 public class State {
 
@@ -11,8 +12,12 @@ public class State {
         STOPPED
     }
 
-    private MyMonitor<StateType> state;
+    private final MyMonitor<StateType> state;
 
+    /**
+     * Constructor for the State class.
+     * This constructor initializes the state to running.
+     */
     public State() {
         this.state = new MyMonitor<>(StateType.RUNNING);
     }

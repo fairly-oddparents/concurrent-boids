@@ -69,6 +69,10 @@ public class MyMonitor<T> {
         }
     }
 
+    /**
+     * Waits until the predicate is true.
+     * @param predicate the predicate that checks the condition on the value
+     */
     public void awaitUntil(Predicate<T> predicate) {
         this.mutex.lock();
         try {
