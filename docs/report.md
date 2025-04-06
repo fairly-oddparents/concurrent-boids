@@ -15,7 +15,7 @@ Terenzi Mirco (1193420; mirco.terenzi@studio.unibo.it)
 - [Design e Architettura](#design-e-architettura)
 - [Comportamento del sistema](#comportamento-del-sistema)
 - [Performance](#performance)
-- [Verifica](#verifica)
+- [Verifica](#verifica-con-java-pathfinder)
 
 ## Analisi del problema
 Il problema affrontato in questo assignment è la simulazione del comportamento collettivo di boids, entità autonome che si muovono in uno spazio bidimensionale seguendo tre regole: separazione, allineamento e coesione, come introdotto da Craig Reynolds nel 1986.
@@ -117,8 +117,18 @@ E = S/N -> (S = speedup, N = number of processors(16))
 
 Ideal efficiency is 1 = all processors are used at full capacity
 
-## Verifica
-Verification of the program (a model of it) using JPF. For this point, only the Java multithreaded programming version may be considered.
+## Verifica con Java Pathfinder
+Il codice della versione multithreaded è stato testato utilizzando [Java PathFinder (JPF)](https://en.wikipedia.org/wiki/Java_Pathfinder), 
+un framework di verifica formale per programmi Java, utilizzato per l'esplorazione degli stati del programma e la 
+verifica della correttezza del codice, con l'obiettivo di individuare eventuali errori di concorrenza, deadlock o 
+violazioni di proprietà. Per eseguire la verifica, è stato utilizzato un modello semplificato del progetto, al fine di 
+ottimizzare i tempi di esecuzione. In particolare, è stata rimossa la parte relativa all'interfaccia grafica e il numero 
+di boids è stato ridotto per evitare un numero elevato di stati da esplorare. Durante la fase di test, è stato 
+analizzato un solo ciclo di simulazione, in modo da concentrarsi sulla verifica della logica di aggiornamento dei boids 
+e sulla gestione della concorrenza di questi ultimi tramite gli elementi di sincronizzazione implementati nel codice, 
+come le barriere e i monitor.
+
+Di seguito viene riportato il risultato della verifica, eseguita su un sistema con 10 core:
 <pre>
 <b>./gradlew runAssignment01Verify</b>
 
