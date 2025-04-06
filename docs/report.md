@@ -128,7 +128,7 @@ JavaPathfinder core system v8.0 (rev 81bca21abc14f6f560610b2aed65832fbc543994) -
 
 
 ====================================================== system under test
-pcd.ass01.multithreaded.Simulation.main()
+pcd.ass01.multithreaded.MultithreadedSimulation.main()
 
 ====================================================== search started: 04/04/25, 13:52
 [WARNING] orphan NativePeer method: jdk.internal.reflect.Reflection.getCallerClass(I)Ljava/lang/Class;

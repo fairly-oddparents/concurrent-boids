@@ -14,17 +14,17 @@ import java.util.concurrent.Future;
 /**
  * Controller for the task-based version of the boids simulation.
  */
-public class TaskController extends BoidsController {
+public class TaskBasedController extends BoidsController {
 
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private ExecutorService executor;
     private final List<Future<Void>> futures;
 
     /**
-     * Constructor for the TaskController.
+     * Constructor for the TaskBasedController.
      * @param model the model
      */
-    public TaskController(BoidsModel model) {
+    public TaskBasedController(BoidsModel model) {
         super(model);
         this.futures = new ArrayList<>();
     }
@@ -36,18 +36,18 @@ public class TaskController extends BoidsController {
             super.awaitRun();
             this.executor = Executors.newFixedThreadPool(NUM_THREADS);
             List<Boid> boids = this.model.getBoids();
-            List<UpdateVelocityTask> velocityTasks = new ArrayList<>();
-            List<UpdatePositionTask> positionTasks = new ArrayList<>();
-            boids.forEach(boid -> velocityTasks.add(new UpdateVelocityTask(boid, this.model)));
-            boids.forEach(boid -> positionTasks.add(new UpdatePositionTask(boid, this.model)));
+            List<ReadTask> readTasks = new ArrayList<>();
+            List<WriteTask> writeTasks = new ArrayList<>();
+            boids.forEach(boid -> readTasks.add(new ReadTask(boid, this.model)));
+            boids.forEach(boid -> writeTasks.add(new WriteTask(boid)));
 
             while (!super.isStopped()) {
                 super.awaitRun();
-                velocityTasks.forEach(task -> this.futures.add(executor.submit(task)));
                 var t0 = System.currentTimeMillis();
+                readTasks.forEach(task -> this.futures.add(executor.submit(task)));
                 waitFutures(futures);
                 futures.clear();
-                positionTasks.forEach(task -> this.futures.add(executor.submit(task)));
+                writeTasks.forEach(task -> this.futures.add(executor.submit(task)));
                 waitFutures(futures);
                 futures.clear();
                 updateView(t0);

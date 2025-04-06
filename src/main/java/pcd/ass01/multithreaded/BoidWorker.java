@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class BoidWorker extends Thread {
 
-    private final Barrier velComputed, boidsUpdated, velUpdated;
+    private final Barrier readToWrite, boidsUpdated;
     private final BoidsController controller;
     private final BoidsModel model;
     private final List<Boid> boids;
@@ -21,23 +21,20 @@ public class BoidWorker extends Thread {
      * Constructor for the BoidWorker.
      * @param controller the controller
      * @param model the model
-     * @param velComputed the barrier for velocity computation
-     * @param velUpdated the barrier for velocity update
-     * @param boidsUpdated the barrier for boids update
+     * @param readToWrite the barrier for waiting all boids have finished reading before writing
+     * @param boidsUpdated the barrier for waiting all boids have finished updating
      * @param boids the list of boids
      */
     public BoidWorker(
             BoidsController controller,
             BoidsModel model,
-            Barrier velComputed,
-            Barrier velUpdated,
+            Barrier readToWrite,
             Barrier boidsUpdated,
             List<Boid> boids
     ) {
         this.controller = controller;
         this.model = model;
-        this.velComputed = velComputed;
-        this.velUpdated = velUpdated;
+        this.readToWrite = readToWrite;
         this.boidsUpdated = boidsUpdated;
         this.boids = boids;
     }
@@ -47,15 +44,13 @@ public class BoidWorker extends Thread {
         while (true) {
             this.controller.awaitRun();
             for (Boid boid : this.boids) {
-                boid.readVelocity(model);
+                boid.calculateVelocity(model);
+                boid.calculatePosition(model);
             }
-            velComputed.await();
+            readToWrite.await();
             for (Boid boid : this.boids) {
                 boid.updateVelocity();
-            }
-            velUpdated.await();
-            for (Boid boid : this.boids) {
-                boid.updatePos(model);
+                boid.updatePosition();
             }
             boidsUpdated.await();
         }

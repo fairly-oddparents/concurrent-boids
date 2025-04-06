@@ -8,7 +8,7 @@ import pcd.ass01.api.View;
 /**
  * Entry-point for the virtual threads version of the boids simulation.
  */
-public class Simulation {
+public class VirtualThreadsSimulation {
 
     private static final int DEFAULT_BOIDS = 0;
 
