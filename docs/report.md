@@ -69,7 +69,10 @@ La sincronizzazione è stata gestita sfruttando il framework _Executor_, che per
 Anche in questa versione viene sfruttato il _Monitor_ per la gestione dello stato globale della simulazione.
 
 ### Versione Virtual Thread
-//TODO
+Nella versione implementata tramite i virtual threads di Java, l'architettura scelta è molto simile alla versione multithreaded, ma ciascun thread è associato a un boid, il che consente di sfruttare i vantaggi dei virtual threads, come la leggerezza e la facilità di gestione della concorrenza.
+Nella loro implementazione, i threads sono stati creati analogamente ai thread utilizzati nella prima versione del progetto, 
+utilizzando due barriere per poter gestire la sincronizzazione dei boids per quanto riguarda l'aggiornamento delle loro posizioni e della velocità, dividendo l'esecuzione in una parte di scrittura e una di lettura.
+
 
 ## Comportamento del sistema
 A description of the behaviour of the system using one or multiple Petri Nets, choosing the proper level of abstraction.
