@@ -14,7 +14,7 @@ public class TaskBasedSimulation {
 
     public static void main(String[] args) {
         BoidsModel model = new BoidsModel(DEFAULT_BOIDS);
-        BoidsController controller = new TaskController(model);
+        BoidsController controller = new TaskBasedController(model);
         View view = new BoidsView(controller, model.getWidth(), model.getHeight());
         controller.attachView(view);
         controller.run();

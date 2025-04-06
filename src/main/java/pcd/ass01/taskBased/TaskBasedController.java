@@ -14,17 +14,17 @@ import java.util.concurrent.Future;
 /**
  * Controller for the task-based version of the boids simulation.
  */
-public class TaskController extends BoidsController {
+public class TaskBasedController extends BoidsController {
 
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private ExecutorService executor;
     private final List<Future<Void>> futures;
 
     /**
-     * Constructor for the TaskController.
+     * Constructor for the TaskBasedController.
      * @param model the model
      */
-    public TaskController(BoidsModel model) {
+    public TaskBasedController(BoidsModel model) {
         super(model);
         this.futures = new ArrayList<>();
     }

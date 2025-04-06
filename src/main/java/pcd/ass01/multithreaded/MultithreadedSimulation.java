@@ -14,7 +14,7 @@ public class MultithreadedSimulation {
 
 	public static void main(String[] args) {
 		BoidsModel model = new BoidsModel(DEFAULT_BOIDS);
-		BoidsController controller = new MultithreadController(model);
+		BoidsController controller = new MultithreadedController(model);
 		View view = new BoidsView(controller, model.getWidth(), model.getHeight());
 		controller.attachView(view);
 		controller.run();

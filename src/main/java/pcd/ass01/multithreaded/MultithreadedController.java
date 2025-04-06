@@ -12,15 +12,15 @@ import java.util.List;
 /**
  * Controller for the multithreaded boids simulation.
  */
-public class MultithreadController extends BoidsController {
+public class MultithreadedController extends BoidsController {
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private final LinkedList<Thread> workers = new LinkedList<>();
 
     /**
-     * Constructor for the MultithreadController.
+     * Constructor for the MultithreadedController.
      * @param model the model
      */
-    public MultithreadController(BoidsModel model) {
+    public MultithreadedController(BoidsModel model) {
         super(model);
     }
 
