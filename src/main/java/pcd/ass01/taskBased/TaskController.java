@@ -36,18 +36,18 @@ public class TaskController extends BoidsController {
             super.awaitRun();
             this.executor = Executors.newFixedThreadPool(NUM_THREADS);
             List<Boid> boids = this.model.getBoids();
-            List<UpdateVelocityTask> velocityTasks = new ArrayList<>();
-            List<UpdatePositionTask> positionTasks = new ArrayList<>();
-            boids.forEach(boid -> velocityTasks.add(new UpdateVelocityTask(boid, this.model)));
-            boids.forEach(boid -> positionTasks.add(new UpdatePositionTask(boid, this.model)));
+            List<ReadTask> readTasks = new ArrayList<>();
+            List<WriteTask> writeTasks = new ArrayList<>();
+            boids.forEach(boid -> readTasks.add(new ReadTask(boid, this.model)));
+            boids.forEach(boid -> writeTasks.add(new WriteTask(boid)));
 
             while (!super.isStopped()) {
                 super.awaitRun();
-                velocityTasks.forEach(task -> this.futures.add(executor.submit(task)));
                 var t0 = System.currentTimeMillis();
+                readTasks.forEach(task -> this.futures.add(executor.submit(task)));
                 waitFutures(futures);
                 futures.clear();
-                positionTasks.forEach(task -> this.futures.add(executor.submit(task)));
+                writeTasks.forEach(task -> this.futures.add(executor.submit(task)));
                 waitFutures(futures);
                 futures.clear();
                 updateView(t0);
