@@ -10,10 +10,8 @@ import pcd.ass01.api.View;
  */
 public class VirtualThreadsSimulation {
 
-    private static final int DEFAULT_BOIDS = 0;
-
     public static void main(String[] args) {
-        BoidsModel model = new BoidsModel(DEFAULT_BOIDS);
+        BoidsModel model = new BoidsModel();
         BoidsController controller = new VirtualThreadsController(model);
         View view = new BoidsView(controller, model.getWidth(), model.getHeight());
         controller.attachView(view);

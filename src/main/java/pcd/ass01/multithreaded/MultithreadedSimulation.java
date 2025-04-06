@@ -10,10 +10,8 @@ import pcd.ass01.api.View;
  */
 public class MultithreadedSimulation {
 
-	private static final int DEFAULT_BOIDS = 0;
-
 	public static void main(String[] args) {
-		BoidsModel model = new BoidsModel(DEFAULT_BOIDS);
+		BoidsModel model = new BoidsModel();
 		BoidsController controller = new MultithreadedController(model);
 		View view = new BoidsView(controller, model.getWidth(), model.getHeight());
 		controller.attachView(view);
