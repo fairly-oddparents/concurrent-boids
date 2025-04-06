@@ -8,7 +8,7 @@ import pcd.ass01.api.View;
 /**
  * Entry-point for the task-based version of the boids simulation.
  */
-public class Simulation {
+public class TaskBasedSimulation {
 
     private static final int DEFAULT_BOIDS = 0;
 

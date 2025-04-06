@@ -8,7 +8,7 @@ import pcd.ass01.api.View;
 /**
  * Entry-point for the multithreaded version of the boids simulation.
  */
-public class Simulation {
+public class MultithreadedSimulation {
 
 	private static final int DEFAULT_BOIDS = 0;
 
