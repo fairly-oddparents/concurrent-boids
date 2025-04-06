@@ -48,13 +48,12 @@ Questo approccio ha permesso una gestione modulare e flessibile delle diverse ve
 ### Versione Multithread
 In questa versione, ogni boid è stato inizialmente associato ad un thread dedicato. Tuttavia, questa soluzione è stata ritenuta troppo onerosa, in quanto limitata al numero di core della CPU utilizzata, e si è passati ad una suddivisione del gruppo di boids nei thread possibili.
 
-L'implementazione di una Barriera ha permesso di gestire la sincronizzazione tra l'aggiornamento delle velocità e delle posizioni: permette di attendere che tutti i thread abbiano terminato di aggiornare le velocità prima di passare all'aggiornamento delle posizioni.
+L'implementazione di una _Barriera_ ha permesso di gestire la sincronizzazione tra l'aggiornamento delle velocità e delle posizioni: permette di attendere che tutti i thread abbiano terminato di aggiornare le velocità prima di passare all'aggiornamento delle posizioni.
 Per evitare, inoltre, un accesso concorrente alle risorse è stata suddivisa la lettura e il calcolo delle velocità dal loro effettivo aggiornamento, questo per tutti i boid, grazie all'utilizzo di una barriera, per garantire modifiche consistenti ed evitare race conditions.
 La view viene aggiornata di conseguenza una volta ultimata la modifica delle posizioni da parte di tutti i thread.
 
-Attraverso l'utilizzo di un Monitor, che richiede l'acquisizione di un lock per la modifica e la lettura di un valore (_ReentrantLock_ e _Condition_), è stata garantita la mutua esclusione nell'aggiornamento del peso delle tre regole quando l'utente interagisce con gli sliders.
-
-//TODO: settaggio stato (stop/pause/resume)
+Attraverso l'implementazione di un _Monitor_, che richiede l'acquisizione di un lock per la modifica e la lettura di un valore (_ReentrantLock_ e _Condition_), è stata garantita la mutua esclusione nell'aggiornamento del peso delle tre regole quando l'utente interagisce con gli sliders.
+Il _Monitor_ è stato utilizzato anche per la gestione del cambio di stato (_PAUSE_ / _RESUME_ / _RUNNING_) quando il sistema viene messo in pausa o stoppato.
 
 ### Versione Task-based
 Questa versione sfrutta un thread pool fisso (di dimensione pari al numero di core del sistema più uno), creato tramite _ExecutorService_. 
@@ -63,9 +62,10 @@ Un gruppo di task ha il compito di aggiornare le velocità, mentre l'altro ha il
 La sincronizzazione è stata gestita sfruttando il framework _Executor_ che permette di ottenere i risultati dei task come _Future_. 
 Questo permette di attendere il completamento del lavoro dei task prima di procedere.
 
+Anche in questo caso viene utilizzato il _Monitor_ implementato per la gestione dello stato della simulazione.
+
 ### Versione Virtual Thread
 //TODO
-
 
 ## Comportamento del sistema
 A description of the behaviour of the system using one or multiple Petri Nets, choosing the proper level of abstraction.
