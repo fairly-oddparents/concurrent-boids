@@ -46,22 +46,21 @@ Il progetto è stato strutturato seguendo il pattern MVC (Model-View-Controller)
 Questo approccio ha permesso una gestione modulare e flessibile delle diverse versioni concorrenti della simulazione.
 
 ### Versione Multithread
-In questa versione, ogni boid è stato inizialmente associato ad un thread dedicato. Tuttavia, questa soluzione è stata ritenuta troppo onerosa, in quanto limitata al numero di core della CPU utilizzata, e si è passati ad una suddivisione del gruppo di boids nei thread possibili.
+In questa versione, ogni boid è stato inizialmente associato a un thread dedicato. Tuttavia, questa soluzione è stata ritenuta troppo onerosa, in quanto limitata al numero di core della CPU utilizzata, e si è passati a una suddivisione dell'insieme di boids tra un sottoinsieme di thread, uno per ciascun processore disponibile sulla Java Virtual Machine (JVM).
 
 L'implementazione di una _Barriera_ ha permesso di gestire la sincronizzazione tra l'aggiornamento delle velocità e delle posizioni, permettendo di attendere che tutti i thread abbiano terminato di aggiornare le velocità prima di passare all'aggiornamento delle posizioni.
 Per evitare, inoltre, un accesso concorrente alle risorse è stata inizialmente suddivisa la lettura e il calcolo delle velocità dal loro effettivo aggiornamento, questo per tutti i boid, grazie all'utilizzo di una barriera, per garantire modifiche consistenti ed evitare race conditions.
+In particolare, per migliorare le prestazioni del sistema ed evitare eccessive attese sulle barriere, l'aggiornamento dei boid è stato suddiviso in due fasi: il calcolo della nuova velocità e della nuova posizione (il quale richiede la lettura delle medesime variabili di altri boid) e l'aggiornamento effettivo delle variabili.
+Questa scelta ha permesso di rimuovere una delle barriere, separando la parte di lettura e scrittura delle variabili, e di migliorare le prestazioni del sistema, in modo da evitare conflitti tra i threads.
+Successivamente, viene aggiornata la view, una volta ultimata la modifica delle posizioni da parte di tutti i thread.
 
-Per migliorare le prestazioni del sistema ed evitare eccessive attese sulle barriere l'approccio è stato ricondotto al problema _Readers/Writers_. Questa scelta ha permesso di rimuovere una delle barriere, separando lettura e calcolo di velocità e posizioni dalla scrittura di queste utlime.
-
-La view viene aggiornata di conseguenza una volta ultimata la modifica delle posizioni da parte di tutti i thread.
-
-Attraverso l'implementazione di un _Monitor_, utilizzando meccanismi di sincronizzazione espliciti (_ReentrantLock_ e _Condition_), è stata, infine, garantita la mutua esclusione nell'aggiornamento del peso delle tre regole quando l'utente interagisce con gli sliders.
-Il _Monitor_ è stato utilizzato anche per la gestione del cambio di stato (_PAUSE_ / _RESUME_ / _RUNNING_) quando il sistema viene messo in pausa o stoppato.
+Infine, attraverso l'utilizzo di un _Monitor_, implementato utilizzando meccanismi di sincronizzazione forniti dalla libreria concorrente di Java (_ReentrantLock_ e _Condition_), è stata garantita la mutua esclusione nell'aggiornamento dei pesi quando l'utente interagisce con la GUI 
+e per la gestione del cambio di stato (_PAUSE_ / _RESUME_ / _RUNNING_), quando il sistema viene messo in pausa o stoppato.
 
 ### Versione Task-based
-In questa versione, la concorrenza viene gestita attraverso un thread pool fisso, creato tramite _ExecutorService_. La dimensione del pool è pari al numero di core disponibili sulla macchina (più uno), per massimizzare l'utilizzo delle risorse di calcolo senza introdurre overhead inutili.
-
-All’avvio della simulazione, per ciascun boid viene creato un task indipendente, che viene sottomesso al thread pool per l’esecuzione parallela. Anche in questa versione, l’architettura scelta si basa su un modello di tipo _Readers/Writers_: un primo gruppo di task ha il compito di leggere e calcolare velocità e posizioni, mentre un secondo gruppo di task ha il compito di memorizzare i nuovi valori.
+In questa versione, la concorrenza viene gestita attraverso un thread pool fisso, creato tramite _ExecutorService_. La dimensione del pool è pari al numero di core disponibili sulla macchina (più uno), per massimizzare l'utilizzo delle risorse di calcolo senza introdurre overhead non necessari.
+All’avvio della simulazione, per ciascun boid viene creato un task indipendente che viene sottomesso al thread pool per l’esecuzione parallela. 
+Anche in questa versione, l’architettura scelta si basa sulla divisione in due sottoinsiemi: un primo gruppo di task ha il compito di leggere e calcolare velocità e posizioni, mentre un secondo gruppo di task ha il compito di memorizzare i nuovi valori.
 
 La sincronizzazione è stata gestita sfruttando il framework _Executor_, che permette di ottenere i risultati dei task come oggetti _Future_:
 - i task sono lanciati in parallelo;
