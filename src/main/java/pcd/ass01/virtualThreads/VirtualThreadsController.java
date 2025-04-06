@@ -28,18 +28,17 @@ public class VirtualThreadsController extends BoidsController {
             super.awaitRun();
             List<Boid> boids = super.model.getBoids();
             int numBoids = boids.size();
-            Barrier velComputed = new MyBarrier(numBoids);
-            Barrier velUpdated = new MyBarrier(numBoids);
+            Barrier readToWrite = new MyBarrier(numBoids);
             Barrier boidsUpdated = new MyBarrier(numBoids + 1);
             for (Boid boid : boids) {
                 Thread.ofVirtual().start(() -> {
                     while (true) {
                         awaitRun();
-                        boid.readVelocity(model);
-                        velComputed.await();
+                        boid.calculateVelocity(model);
+                        boid.calculatePosition(model);
+                        readToWrite.await();
                         boid.updateVelocity();
-                        velUpdated.await();
-                        boid.updatePos(model);
+                        boid.updatePosition();
                         boidsUpdated.await();
                     }
                 });
