@@ -58,9 +58,7 @@ public class MultithreadedController extends BoidsController {
     }
 
     private synchronized void removeThreads() {
-        for (Thread thread : workers) {
-            thread.interrupt();
-        }
+        workers.forEach(w -> w.interrupt());
         workers.clear();
     }
 }

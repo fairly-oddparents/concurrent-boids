@@ -59,7 +59,6 @@ public class MyMonitor<T> {
                 try {
                     available.await();
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                     return null;
                 }
             }
@@ -80,7 +79,6 @@ public class MyMonitor<T> {
                 try {
                     this.available.await();
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                     break;
                 }
             }
