@@ -72,6 +72,45 @@ A description of the behaviour of the system using one or multiple Petri Nets, c
 
 ## Performance
 Performance tests to analyze and discuss the performance of the programs (for each version) compared to the sequential version.
+Risultati con 16 Core:
+Condizioni Separation - Alignment - Coehsion impostati ad 1
+
+_SpeedUp_
+Sequenziale(42827ms)	100 boid - 1000 iteration
+Sequenziale(41900ms)	1000 boid - 1000 iteration
+Sequenziale(520614ms)	5000 boid - 1000 iteration
+
+	Multithread(19304ms)	100 boid - 1000 iteration: (sequenziale/multithread)	->42827/19304 = 2,218
+	Multithread(18933ms)	1000 boid - 1000 iteration: (sequenziale/multithread) 	->41900/18933 = 2,213
+	Multithread(76706ms)	5000 boid - 1000 iteration: (sequenziale/multithread) 	->520614/76706= 6,787
+
+	TaskBased(19417ms)	100 boid - 1000 iteration: (sequenziale/taskBased)	->42827/19417 = 2,205
+	TaskBased(21634ms)	1000 boid - 1000 iteration: (sequenziale/taskbased) 	->41900/21634 = 1,936
+	TaskBased(37369ms)	5000 boid - 1000 iteration: (sequenziale/taskbased) 	->520614/37369= 13,931
+
+	VirtualThread(19473ms)	100 boid - 1000 iteration: (sequenziale/virtualthread)	->42827/19473 = 2,199
+	VirtualThread(23141ms)	1000 boid - 1000 iteration: (sequenziale/virtualthread) ->41900/23141 = 1,810
+	VirtualThread(66864ms)	5000 boid - 1000 iteration: (sequenziale/virtualthread)	->520614/66864= 7,786
+
+_Efficiency_
+E = S/N -> (S = speedup, N = number of processors(16))
+
+	Con 100 boids:
+		Multithread	: E -> 0,138
+		TaskBased	: E -> 0,137
+		VirtualThread	: E -> 0,137
+
+	Con 1000 boids:
+		Multithread	: E -> 0,138
+		TaskBased	: E -> 0,121
+		VirtualThread	: E -> 0,113
+
+	Con 5000 boids:
+		Multithread	: E -> 0,424
+		TaskBased	: E -> 0,870
+		VirtualThread	: E -> 0,486
+
+Ideal efficiency is 1 = all processors are used at full capacity
 
 ## Verifica
 Verification of the program (a model of it) using JPF. For this point, only the Java multithreaded programming version may be considered.
