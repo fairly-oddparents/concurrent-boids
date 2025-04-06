@@ -3,6 +3,7 @@ package pcd.ass01;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 
 /**
  * A simple monitor class that allows one thread to set a value and another thread to get it.
@@ -65,6 +66,22 @@ public class MyMonitor<T> {
             return value;
         } finally {
             mutex.unlock();
+        }
+    }
+
+    public void awaitUntil(Predicate<T> predicate) {
+        this.mutex.lock();
+        try {
+            while (!predicate.test(this.value)) {
+                try {
+                    this.available.await();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        } finally {
+            this.mutex.unlock();
         }
     }
 }

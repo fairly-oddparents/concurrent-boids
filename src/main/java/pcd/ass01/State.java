@@ -11,65 +11,58 @@ public class State {
         STOPPED
     }
 
-    private StateType state;
-
-    private void setState(StateType state) {
-        this.state = state;
-    }
+    private MyMonitor<StateType> state;
 
     public State() {
-        this.setState(StateType.RUNNING);
+        this.state = new MyMonitor<>(StateType.RUNNING);
+    }
+
+    private void setState(StateType state) {
+        this.state.set(state);
     }
 
     /**
      * Check if the simulation is running.
      * @return true if the simulation is running, false otherwise
      */
-    public synchronized boolean isRunning() {
-        return this.state.equals(StateType.RUNNING);
+    public boolean isRunning() {
+        return this.state.get().equals(StateType.RUNNING);
     }
 
     /**
      * Check if the simulation is stopped.
      * @return true if the simulation is stopped, false otherwise
      */
-    public synchronized boolean isStopped() {
-        return this.state.equals(StateType.STOPPED);
+    public boolean isStopped() {
+        return this.state.get().equals(StateType.STOPPED);
     }
 
     /**
      * Stop the simulation.
      */
-    public synchronized void stop() {
+    public void stop() {
         this.setState(StateType.STOPPED);
     }
 
     /**
      * Suspend the simulation.
      */
-    public synchronized void pause() {
+    public void pause() {
         this.setState(StateType.PAUSED);
     }
 
     /**
      * Resume the simulation.
      */
-    public synchronized void resume() {
+    public void resume() {
         this.setState(StateType.RUNNING);
-        notifyAll();
     }
 
     /**
      * Wait that the simulation is running.
      */
-    public synchronized void awaitRun() {
-        try {
-            while (!this.isRunning()) {
-                wait();
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+    public void awaitRun() {
+        this.state.awaitUntil(s -> isRunning());
     }
 
 }
