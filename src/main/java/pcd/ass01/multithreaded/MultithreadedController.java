@@ -15,6 +15,7 @@ import java.util.List;
 public class MultithreadedController extends BoidsController {
     private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors() + 1;
     private final LinkedList<Thread> workers = new LinkedList<>();
+    private Barrier boidsUpdated;
 
     /**
      * Constructor for the MultithreadedController.
@@ -29,24 +30,31 @@ public class MultithreadedController extends BoidsController {
         super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
             super.awaitRun();
-            Barrier readToWrite = new MyBarrier(NUM_THREADS);
-            Barrier boidsUpdated = new MyBarrier(NUM_THREADS + 1);
-            List<Boid> boids = this.model.getBoids();
-            int boidsPerWorker = boids.size() / NUM_THREADS;
-            for (int i = 0; i < NUM_THREADS; i++) {
-                int start = i * boidsPerWorker;
-                int end = (i == NUM_THREADS - 1) ? boids.size() : start + boidsPerWorker;
-                List<Boid> subList = boids.subList(start, end);
-                this.workers.add(new BoidWorker(this, this.model, readToWrite, boidsUpdated, subList));
-            }
-            workers.forEach(Thread::start);
+            this.SetUpBoids();
             while (!super.isStopped()) {
                 var t0 = System.currentTimeMillis();
-                boidsUpdated.await();
+                this.boidsUpdated.await();
                 updateView(t0);
             }
             this.removeThreads();
         }
+    }
+
+    private void SetUpBoids() {
+        List<Boid> boids = this.model.getBoids();
+        int numThreads = Math.min(NUM_THREADS, boids.size());
+        Barrier readToWrite = new MyBarrier(numThreads);
+        Barrier boidsUpdated = new MyBarrier(numThreads + 1);
+        int boidsPerWorker = boids.size() / numThreads;
+        for (int i = 0; i < numThreads; i++) {
+            int start = i * boidsPerWorker;
+            int end = (i == numThreads - 1) ? boids.size() : start + boidsPerWorker;
+            List<Boid> subList = boids.subList(start, end);
+            Thread worker = new BoidWorker(this, this.model, readToWrite, boidsUpdated, subList);
+            this.workers.add(worker);
+            worker.start();
+        }
+        this.boidsUpdated = boidsUpdated;
     }
 
     private synchronized void removeThreads() {
