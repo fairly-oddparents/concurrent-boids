@@ -61,7 +61,7 @@ public class TaskBasedController extends BoidsController {
             try {
                 future.get();
             } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e); //TODO:
+                throw new RuntimeException(e);
             }
         });
     }
