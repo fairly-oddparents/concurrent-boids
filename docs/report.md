@@ -63,13 +63,13 @@ Nella loro implementazione, i threads sono stati creati analogamente ai thread u
 
 ## Comportamento del sistema
 Il comportamento del sistema è basato principalmente su una classe `State`, la quale mantiene, tramite accessi in mutua esclusione, lo stato della simulazione.
-Il diagramma riportato di seguito è una rete di Petri che rappresenta le interazioni tra le classi principali, nello specifico tra il controller, l'insieme di workers e lo stato, rispettivamente in verde, arancione e blu. L'elemento di sincronizzazione principale è rappresentato dalle transizioni _awaitRun_, che permettono al controller e ai workers di proseguire la loro esecuzione solamente se lo stato è correttamente impostato, ossia durante la _run_.
+Il diagramma riportato di seguito è una rete di Petri che rappresenta le interazioni tra le classi principali, nello specifico tra il controller, l'insieme di workers e lo stato, rispettivamente in verde, arancione e blu. L'elemento di sincronizzazione principale è rappresentato dalle transizioni `awaitRun`, che permettono al controller e ai workers di proseguire la loro esecuzione solamente se lo stato è correttamente impostato, ossia durante la _run_.
 <div align="center">
 	<img src="./images/simulation-state-diagram.png" alt="Simulation's state diagram" width="500"/>
 </div>
 
-Nel diagramma precedente la parte riguardante l'esecuzione del controller e dei workers è stata semplificata per migliorare la lettura dello schema. Di seguito viene riportato più nel dettaglio il processo di sincronizzazione tra i due elementi: principalmente tramite una barriera _boidsUpdated_ che indica la fine dell'aggiornamento dei boids presenti nella simulazione, utilizzata dal controller per capire quando è il momento di aggiornare la vista.
-Per la sincronizzazione dei boids, ciascuno identificato da un token, viene utilizzata una seconda barriera _readToWrite_ che serve definire temporalmente la parte di lettura (eseguita prima della barriera) e la parte di scrittura (eseguita dopo) descritte nei precedenti capitoli della relazione. Tale elemento permette a più threads (o tasks) di accedere alla velocità e alla posizione dei boids senza il verificarsi di corse critiche.
+Nel diagramma precedente la parte riguardante l'esecuzione del controller e dei workers è stata semplificata per migliorare la lettura dello schema. Di seguito viene riportato più nel dettaglio il processo di sincronizzazione tra i due elementi: principalmente tramite una barriera `boidsUpdated` che indica la fine dell'aggiornamento dei boids presenti nella simulazione, utilizzata dal controller per capire quando è il momento di aggiornare la vista.
+Per la sincronizzazione dei boids, ciascuno identificato da un token, viene utilizzata una seconda barriera `readToWrite` che serve definire temporalmente la parte di lettura (eseguita prima della barriera) e la parte di scrittura (eseguita dopo) descritte nei precedenti capitoli della relazione. Tale elemento permette a più threads (o tasks) di accedere alla velocità e alla posizione dei boids senza il verificarsi di corse critiche.
 <div align="center">
 	<img src="./images/controller-workers-synchronization-diagram.png" alt="Controller and workers synchronization diagram" width="500"/>
 </div>
