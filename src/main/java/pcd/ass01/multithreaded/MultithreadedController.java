@@ -57,7 +57,7 @@ public class MultithreadedController extends BoidsController {
         this.boidsUpdated = boidsUpdated;
     }
 
-    private synchronized void removeThreads() {
+    private void removeThreads() {
         for (Thread thread : workers) {
             thread.interrupt();
         }
