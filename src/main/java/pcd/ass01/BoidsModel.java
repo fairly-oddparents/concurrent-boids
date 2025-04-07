@@ -24,14 +24,12 @@ public class BoidsModel {
 
     /**
      * Constructor for the BoidsModel class.
-     * @param numBoids the number of boids to create
      */
-    public BoidsModel(int numBoids) {
+    public BoidsModel() {
         this.boids = new MyMonitor<>(new ArrayList<>());
         this.separationWeight = new MyMonitor<>(SEPARATION_WEIGHT);
         this.alignmentWeight = new MyMonitor<>(ALIGNMENT_WEIGHT);
         this.cohesionWeight = new MyMonitor<>(COHESION_WEIGHT);
-        this.createBoids(numBoids);
     }
 
     private void createBoids(int amount) {

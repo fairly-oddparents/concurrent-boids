@@ -11,9 +11,9 @@ import pcd.ass01.api.View;
 public class Simulation {
 
 	private static final int DEFAULT_BOIDS = 0;
-	private static long startTime = 0;
-	private static long endTime = 0;
-	private static long totalElapsed = 0;
+    private static long startTime = 0;
+    private static long endTime = 0;
+    private static long totalElapsed = 0;
 
 	public static void main(String[] args) {
 		BoidsModel model = new BoidsModel(DEFAULT_BOIDS);
