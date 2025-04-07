@@ -62,7 +62,9 @@ Nella versione implementata tramite i _virtual threads_ di Java, l'architettura 
 Nella loro implementazione, i threads sono stati creati analogamente ai thread utilizzati nella prima versione del progetto, utilizzando due barriere per poter gestire la sincronizzazione dei boids per quanto riguarda l'aggiornamento delle loro posizioni e della velocità, dividendo l'esecuzione in una parte di scrittura e una di lettura.
 
 ## Comportamento del sistema
-A description of the behaviour of the system using one or multiple Petri Nets, choosing the proper level of abstraction.
+![Simulation's state diagram](./images/simulation-state-diagram.png)
+
+![Controller and workers synchronization diagram](./images/controller-workers-synchronization-diagram.png)
 
 ## Performance
 Performance tests to analyze and discuss the performance of the programs (for each version) compared to the sequential version.
