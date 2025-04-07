@@ -27,16 +27,19 @@ public class MultithreadedController extends BoidsController {
 
     @Override
     public void run() {
+        int iteration = 0;
         super.model.setNumberBoids(super.getNumberOfBoids());
         while (true) {
             super.awaitRun();
             this.SetUpBoids();
-            while (!super.isStopped()) {
+            while (iteration < 1000) {
                 var t0 = System.currentTimeMillis();
                 this.boidsUpdated.await();
                 updateView(t0);
+                iteration++;
             }
             this.removeThreads();
+            break;
         }
     }
 

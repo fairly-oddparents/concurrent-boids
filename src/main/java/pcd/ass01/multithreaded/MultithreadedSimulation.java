@@ -8,16 +8,15 @@ import pcd.ass01.api.View;
 /**
  * Entry-point for the multithreaded version of the boids simulation.
  */
-public class Simulation {
+public class MultithreadedSimulation {
 
-	private static final int DEFAULT_BOIDS = 0;
-    private static long startTime = 0;
-    private static long endTime = 0;
-    private static long totalElapsed = 0;
+	private static long startTime = 0;
+	private static long endTime = 0;
+	private static long totalElapsed= 0;
 
 	public static void main(String[] args) {
-		BoidsModel model = new BoidsModel(DEFAULT_BOIDS);
-		BoidsController controller = new MultithreadController(model);
+		BoidsModel model = new BoidsModel();
+		BoidsController controller = new MultithreadedController(model);
 		View view = new BoidsView(controller, model.getWidth(), model.getHeight());
 		controller.attachView(view);
 
