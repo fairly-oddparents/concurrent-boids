@@ -75,46 +75,34 @@ Per la sincronizzazione dei boids, ciascuno identificato da un token, viene util
 </div>
 
 ## Performance
-Performance tests to analyze and discuss the performance of the programs (for each version) compared to the sequential version.
-Risultati con 16 Core:
-Condizioni Separation - Alignment - Coehsion impostati ad 1
+Di seguito sono riportati i risultati i dati sulla performance raccolti durante l'esecuzione del progetto su un calcolatore da 16 core.
+I pesi relativi a separazione, allineamento e coesione hanno valore 1 e il test considera l'esecuzione di 1000 iterazioni.
 
-_SpeedUp_
-Sequenziale(42827ms)	100 boid - 1000 iteration
-Sequenziale(41900ms)	1000 boid - 1000 iteration
-Sequenziale(520614ms)	5000 boid - 1000 iteration
+### Speedup
+Dati i seguenti tempi d'esecuzione raccolti:
+|               |  100 boids |  1000 boids |  5000 boids |
+|---------------|------------|-------------|-------------|
+|Sequenziale    |  42 827ms  |   41 900ms  |  520 614ms  |
+|Multithreaded  |  19 304ms  |   18 933ms  |   76 706ms  |
+|Task-based     |  19 417ms  |   21 634ms  |   37 369ms  |
+|Virtual threads|  19 473ms  |   23 141ms  |   66 864ms  |
 
-	Multithread(19304ms)	100 boid - 1000 iteration: (sequenziale/multithread)	->42827/19304 = 2,218
-	Multithread(18933ms)	1000 boid - 1000 iteration: (sequenziale/multithread) 	->41900/18933 = 2,213
-	Multithread(76706ms)	5000 boid - 1000 iteration: (sequenziale/multithread) 	->520614/76706= 6,787
+Lo _speedup_ è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'esecuzione della versione sequenziale, mentre $T_n$ il tempo richiesto dall'esecuzione della versione parallela, eseguita su $n$ processori:
+|               | 100 boids | 1000 boids | 5000 boids |
+|---------------|-----------|------------|------------|
+|Multithreaded  |   2,218   |    2,205   |   2,199    |
+|Task-based     |   2,213   |    1,936   |   1,810    |
+|Virtual threads|   6,787   |   13,931   |   7,786    |
 
-	TaskBased(19417ms)	100 boid - 1000 iteration: (sequenziale/taskBased)	->42827/19417 = 2,205
-	TaskBased(21634ms)	1000 boid - 1000 iteration: (sequenziale/taskbased) 	->41900/21634 = 1,936
-	TaskBased(37369ms)	5000 boid - 1000 iteration: (sequenziale/taskbased) 	->520614/37369= 13,931
 
-	VirtualThread(19473ms)	100 boid - 1000 iteration: (sequenziale/virtualthread)	->42827/19473 = 2,199
-	VirtualThread(23141ms)	1000 boid - 1000 iteration: (sequenziale/virtualthread) ->41900/23141 = 1,810
-	VirtualThread(66864ms)	5000 boid - 1000 iteration: (sequenziale/virtualthread)	->520614/66864= 7,786
-
-_Efficiency_
-E = S/N -> (S = speedup, N = number of processors(16))
-
-	Con 100 boids:
-		Multithread	: E -> 0,138
-		TaskBased	: E -> 0,137
-		VirtualThread	: E -> 0,137
-
-	Con 1000 boids:
-		Multithread	: E -> 0,138
-		TaskBased	: E -> 0,121
-		VirtualThread	: E -> 0,113
-
-	Con 5000 boids:
-		Multithread	: E -> 0,424
-		TaskBased	: E -> 0,870
-		VirtualThread	: E -> 0,486
-
-Ideal efficiency is 1 = all processors are used at full capacity
+### Efficienza
+Calcolata con la formula $E = \frac{S}{N}$, dove $S$ è lo speedup e $N$ il numero di processori (in questo caso 16).
+L'efficienza ideale è indicata con valore 1, ossia quando tutti i processori sono utilizzati alla loro massima capacità.
+|               | 100 boids | 1000 boids | 5000 boids |
+|---------------|-----------|------------|------------|
+|Multithreaded  |   0,138   |    0,138   |    0,424   |
+|Task-based     |   0,137   |    0,121   |    0,870   |
+|Virtual threads|   0,137   |    0,113   |    0,486   |
 
 ## Verifica con Java Pathfinder
 Il codice della versione multithreaded è stato testato utilizzando [Java PathFinder (JPF)](https://en.wikipedia.org/wiki/Java_Pathfinder), un framework di verifica formale per programmi Java, utilizzato per l'esplorazione degli stati del programma e la verifica della correttezza del codice, con l'obiettivo di individuare eventuali errori di concorrenza, deadlock o violazioni di proprietà.
