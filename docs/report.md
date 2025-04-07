@@ -93,7 +93,7 @@ _SpeedUp_
 
 	TaskBased(19417ms)	100 boid - 1000 iteration: (sequenziale/taskBased)	    ->42827/19417 = 2,205
 	TaskBased(21634ms)	1000 boid - 1000 iteration: (sequenziale/taskbased) 	->41900/21634 = 1,936
-	TaskBased(37369ms)	5000 boid - 1000 iteration: (sequenziale/taskbased) 	->520614/37369= 13,931
+	TaskBased(35178ms)	5000 boid - 1000 iteration: (sequenziale/taskbased) 	->520614/35178= 14,799
 
 	VirtualThread(19473ms)	100 boid - 1000 iteration: (sequenziale/virtualthread)	->42827/19473 = 2,199
 	VirtualThread(18467ms)	1000 boid - 1000 iteration: (sequenziale/virtualthread) ->41900/18467 = 2,268
@@ -114,7 +114,7 @@ E = S/N -> (S = speedup, N = number of processors(16))
 
 	Con 5000 boids:
 		Multithread	: E -> 0,729
-		TaskBased	: E -> 0,870
+		TaskBased	: E -> 0,924
 		VirtualThread	: E -> 0,666
 
 Ideal efficiency is 1 = all processors are used at full capacity
