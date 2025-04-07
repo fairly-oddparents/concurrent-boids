@@ -7,7 +7,7 @@ The repository contains the first assignment of the [Concurrent and Distributed 
 - Virtual threads
 
 ### Documentation
-Within the documentation directory, you will find a concise [report](https://github.com/mircoterenzi/concurrent-boids/blob/main/docs/report.md) detailing all the design and implementation decisions made during the development process. In particular:
+Within the documentation directory, you will find a concise [report](https://github.com/mircoterenzi/concurrent-boids/blob/main/docs/report.md) (in Italian) detailing all the design and implementation decisions made during the development process. In particular:
 - A brief analysis of the problem.
 - A description of the adopted design, strategy and architecture.
 - An explanation of the system's behaviour, using Petri Nets.
