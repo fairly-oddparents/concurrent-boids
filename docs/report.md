@@ -72,10 +72,11 @@ Nell'immagine, le due transizioni appena descritte sono collegate tramite una li
 </div>
 
 Nel diagramma precedente la parte riguardante l'esecuzione del controller e dei workers è stata semplificata per migliorare la lettura dello schema.
-Di seguito viene riportato più nel dettaglio il processo di sincronizzazione tra i due elementi, il quale avviene principalmente tramite una barriera, chiamata _boids updated_, che indica la fine dell'aggiornamento dei boids presenti nella simulazione, utilizzata dal controller per capire quando è il momento di aggiornare la vista.
+Di seguito viene riportato più nel dettaglio il processo di sincronizzazione tra i due elementi, il quale avviene principalmente tramite la transizione _boids updated_, che indica la fine dell'aggiornamento dei boids presenti nella simulazione, utilizzata dal controller per capire quando è il momento di aggiornare la vista.
 
-Per la sincronizzazione dei boids, ciascuno identificato da un token, viene utilizzata una seconda barriera _read-to-write_ che serve definire temporalmente la parte di lettura (eseguita prima della barriera) e la parte di scrittura (eseguita dopo) descritte nei precedenti capitoli della relazione.
-Tale elemento permette a più threads (o tasks) di accedere alla velocità e alla posizione dei boids evitando corse critiche.
+Per la sincronizzazione dei boids, viene utilizzata la transizione _read-to-write_ che permette una suddivisione temporale tra la parte di lettura (eseguita prima della barriera) e la parte di scrittura (eseguita dopo) descritte nei precedenti capitoli della relazione.
+Tale elemento permette a più workers di accedere alla velocità e alla posizione dei boids evitando corse critiche.
+
 <div align="center">
 	<img src="./images/focus-on-controller-workers.png" alt="Rappresentazione dettagliata della sincronizzazione tra controller e workers." width="500"/>
 </div>
