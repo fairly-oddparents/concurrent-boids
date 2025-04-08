@@ -87,31 +87,31 @@ I pesi relativi a separazione, allineamento e coesione hanno valore 1 e il test 
 ### Speedup
 Dati i seguenti tempi d'esecuzione raccolti:
 
-|               |  100 boids |  1000 boids |  5000 boids |
-|---------------|------------|-------------|-------------|
-|Sequenziale    |  42 827ms  |   41 900ms  |  520 614ms  |
-|Multithreaded  |  19 304ms  |   18 933ms  |   76 706ms  |
-|Task-based     |  19 417ms  |   21 634ms  |   37 369ms  |
-|Virtual threads|  19 473ms  |   23 141ms  |   66 864ms  |
+|                 | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Sequenziale     | 42 827ms  | 41 900ms   | 520 614ms  |
+| Multithreaded   | 19 304ms  | 18 933ms   | 76 706ms   |
+| Task-based      | 19 417ms  | 21 634ms   | 37 369ms   |
+| Virtual threads | 19 473ms  | 23 141ms   | 66 864ms   |
 
 Lo _speedup_ è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'esecuzione della versione sequenziale, mentre $T_n$ il tempo richiesto dall'esecuzione della versione parallela, eseguita su $n$ processori:
 
-|               | 100 boids | 1000 boids | 5000 boids |
-|---------------|-----------|------------|------------|
-|Multithreaded  |   2,218   |    2,205   |   2,199    |
-|Task-based     |   2,213   |    1,936   |   1,810    |
-|Virtual threads|   6,787   |   13,931   |   7,786    |
+|                 | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Multithreaded   | 2,218     | 2,205      | 2,199      |
+| Task-based      | 2,213     | 1,936      | 1,810      |
+| Virtual threads | 6,787     | 13,931     | 7,786      |
 
 
 ### Efficienza
 Calcolata con la formula $E = \frac{S}{N}$, dove $S$ è lo speedup e $N$ il numero di processori (in questo caso 16).
 L'efficienza ideale è indicata con valore 1, ossia quando tutti i processori sono utilizzati alla loro massima capacità.
 
-|               | 100 boids | 1000 boids | 5000 boids |
-|---------------|-----------|------------|------------|
-|Multithreaded  |   0,138   |    0,138   |    0,424   |
-|Task-based     |   0,137   |    0,121   |    0,870   |
-|Virtual threads|   0,137   |    0,113   |    0,486   |
+|                 | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Multithreaded   | 0,138     | 0,138      | 0,424      |
+| Task-based      | 0,137     | 0,121      | 0,870      |
+| Virtual threads | 0,137     | 0,113      | 0,486      |
 
 ## Verifica con Java Pathfinder
 Il codice della versione multithreaded è stato testato utilizzando [Java PathFinder (JPF)](https://en.wikipedia.org/wiki/Java_Pathfinder), un framework di verifica formale per programmi Java, utilizzato per l'esplorazione degli stati del programma e la verifica della correttezza del codice, con l'obiettivo di individuare eventuali errori di concorrenza, deadlock o violazioni di proprietà.
