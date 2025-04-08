@@ -15,129 +15,108 @@ Terenzi Mirco (1193420; mirco.terenzi@studio.unibo.it)
 - [Design e Architettura](#design-e-architettura)
 - [Comportamento del sistema](#comportamento-del-sistema)
 - [Performance](#performance)
-- [Verifica](#verifica-con-java-pathfinder)
+- [Verifica con Java Pathfinder](#verifica-con-java-pathfinder)
 
 ## Analisi del problema
 Il problema affrontato in questo assignment è la simulazione del comportamento collettivo di boids, entità autonome che si muovono in uno spazio bidimensionale seguendo tre regole: separazione, allineamento e coesione, come introdotto da Craig Reynolds nel 1986.
 
-Ogni boid, ad ogni iterazione del ciclo di simulazione, deve:
-
+Ogni boid, a ogni iterazione del ciclo di simulazione, deve:
 - Analizzare la posizione e velocità di tutti gli altri boid che lo circondano.
 - Calcolare la nuova velocità e aggiornare la propria posizione.
 
 La programmazione concorrente permette di parallelizzare questi aggiornamenti, ma alcuni aspetti richiedono particolare attenzione:
-
 - Le velocità e le posizioni di ogni boid sono calcolate in base a quelle dei suoi vicini, bisogna quindi gestire in modo sicuro l'accesso concorrente ai dati condivisi.
 - Le fasi di calcolo e aggiornamento devono essere sincronizzate per evitare letture/scritture inconsistenti.
 - Per un corretto calcolo della nuova posizione dei boid, è necessario che sia prima calcolata e aggiornata la velocità.
-- L'intefaccia utente deve essere reattiva e sincronizzarsi con l'aggiornamento dei boids.
+- L'interfaccia utente deve essere reattiva e sincronizzarsi con l'aggiornamento dei boids.
 
 
 ## Design e Architettura
-
-Il progetto è stato strutturato seguendo il pattern MVC (Model-View-Controller), con una netta separazione tra logica della simulazione, interfaccia utente e controllo dell'esecuzione:
-
-- **Model** (_BoidsModel_): contiene la logica della simulazione dei boid. Gestisce la lista dei boid, aggiorna le loro posizioni e velocità secondo le regole di comportamento (separazione, coesione, allineamento).
-  Per ciascuna versione è stata poi sviluppata un’estensione del modello che implementa la logica specifica del parallelismo.
-- **View** (_BoidsPanel_, _BoidsView_): componente Swing responsabile della rappresentazione grafica dei boid e dell'interazione con l'utente. Fornisce i controlli richiesti (start, stop, pause, sliders, input numerico).
-
-- **Controller** (_BoidsController_): gestisce il ciclo di vita della simulazione e funge da ponte tra la vista e il modello. In base alla versione selezionata, avvia il motore di simulazione corretto.
-
-Questo approccio ha permesso una gestione modulare e flessibile delle diverse versioni concorrenti della simulazione.
+Il progetto è stato strutturato seguendo il pattern MVC (Model-View-Controller), con una netta separazione tra logica della simulazione, interfaccia grafica e controllo dell'esecuzione.
+Tale approccio ha consentito di gestire in modo modulare e flessibile le diverse versioni concorrenti della simulazione. Nello specifico:
+- **Model** (`BoidsModel`): contiene la logica della simulazione dei _boids_, ne gestisce il mantenimento e l'aggiornamento della posizione e della velocità, secondo le regole di comportamento indicate nel progetto di Reynolds (separazione, coesione, allineamento);
+- **View** (`BoidsPanel`, `BoidsView`): implementata utilizzando Swing, è responsabile della rappresentazione grafica dei boids e dell'interazione tra l'utente e il programma. Fornisce dei pulsanti per gestire l'esecuzione della simulazione (start, stop e pause/resume) e l'aggiornamento delle regole di movimento di ciascun elemento, tramite _sliders_.
+- **Controller** (`BoidsController`): gestisce il ciclo di vita della simulazione e funge da ponte tra la vista e il modello,
 
 ### Versione Multithread
 In questa versione, ogni boid è stato inizialmente associato a un thread dedicato. Tuttavia, questa soluzione è stata ritenuta troppo onerosa, in quanto limitata al numero di core della CPU utilizzata, e si è passati a una suddivisione dell'insieme di boids tra un sottoinsieme di thread, uno per ciascun processore disponibile sulla Java Virtual Machine (JVM).
 
-L'implementazione di una _Barriera_ ha permesso di gestire la sincronizzazione tra l'aggiornamento delle velocità e delle posizioni, permettendo di attendere che tutti i thread abbiano terminato di aggiornare le velocità prima di passare all'aggiornamento delle posizioni.
-Per evitare, inoltre, un accesso concorrente alle risorse è stata inizialmente suddivisa la lettura e il calcolo delle velocità dal loro effettivo aggiornamento, questo per tutti i boid, grazie all'utilizzo di una barriera, per garantire modifiche consistenti ed evitare race conditions.
-In particolare, per migliorare le prestazioni del sistema ed evitare eccessive attese sulle barriere, l'aggiornamento dei boid è stato suddiviso in due fasi: il calcolo della nuova velocità e della nuova posizione (il quale richiede la lettura delle medesime variabili di altri boid) e l'aggiornamento effettivo delle variabili.
-Questa scelta ha permesso di rimuovere una delle barriere, separando la parte di lettura e scrittura delle variabili, e di migliorare le prestazioni del sistema, in modo da evitare conflitti tra i threads.
-Successivamente, viene aggiornata la view, una volta ultimata la modifica delle posizioni da parte di tutti i thread.
+Per gestire la sincronizzazione tra l'aggiornamento della velocità e quello della posizione, sono inizialmente state definite due _barrier_: una per ciascun aggiornamento. 
+Successivamente, per migliorare le prestazioni del sistema ed evitare eccessive attese sulle barriere, l'aggiornamento dei boid è stato ripensato in modo da poter utilizzare una barriera in meno. 
+In particolare, per evitare corse critiche negli accessi alla posizione e alla velocità, è stata implementata una barriera che definisse due momenti distinti nei quali accedere (read) e aggiornare (write) tali variabili.
 
-Infine, attraverso l'utilizzo di un _Monitor_, implementato utilizzando meccanismi di sincronizzazione forniti dalla libreria concorrente di Java (_ReentrantLock_ e _Condition_), è stata garantita la mutua esclusione nell'aggiornamento dei pesi quando l'utente interagisce con la GUI 
-e per la gestione del cambio di stato (_PAUSE_ / _RESUME_ / _RUNNING_), quando il sistema viene messo in pausa o stoppato.
+Infine, attraverso l'utilizzo di un _monitor_, implementato utilizzando meccanismi di sincronizzazione forniti dalla libreria concorrente di Java (`ReentrantLock` e `Condition`), è stata garantita la mutua esclusione nell'aggiornamento dei pesi, quando l'utente interagisce con la GUI, e per la gestione del cambio di stato (in pausa, stop o in esecuzione).
 
 ### Versione Task-based
-In questa versione, la concorrenza viene gestita attraverso un thread pool fisso, creato tramite _ExecutorService_. La dimensione del pool è pari al numero di core disponibili sulla macchina (più uno), per massimizzare l'utilizzo delle risorse di calcolo senza introdurre overhead non necessari.
-All’avvio della simulazione, per ciascun boid viene creato un task indipendente che viene sottomesso al thread pool per l’esecuzione parallela. 
-Anche in questa versione, l’architettura scelta si basa sulla divisione in due sottoinsiemi: un primo gruppo di task ha il compito di leggere e calcolare velocità e posizioni, mentre un secondo gruppo di task ha il compito di memorizzare i nuovi valori.
+La concorrenza viene gestita attraverso un _thread pool_ fisso, creato tramite `ExecutorService`.
+La dimensione di tale insieme è calcolato come il numero di core disponibili sulla macchina (più uno), per massimizzare l'utilizzo delle risorse di calcolo senza introdurre overhead non necessari.
+All’avvio della simulazione, per ciascun boid viene creato un task indipendente che eseguito concorrentemente agli altri.
+Anche in questa versione, l’architettura scelta si basa sulla divisione dei task in due tipologie, in base al loro compito: un primo gruppo che ha il compito di leggere e calcolare velocità e posizioni e un secondo gruppo che ha il compito di aggiornare le variabili con i nuovi valori.
 
-La sincronizzazione è stata gestita sfruttando il framework _Executor_, che permette di ottenere i risultati dei task come oggetti _Future_:
-- i task sono lanciati in parallelo;
-- prima di procedere con l'aggiornamento si attende il completamento del lavoro di tutti i task.
-
-Anche in questa versione viene sfruttato il _Monitor_ per la gestione dello stato globale della simulazione.
+La sincronizzazione è stata gestita sfruttando il framework `Executor`, che permette di ottenere i risultati dei task come oggetti di tipo `Future<Void>`. 
+Tale classe permette di ritornare un elemento che conterrà il risultato del task, nel nostro caso, essendo di tipo `Void` non viene ritornato un risultato effettivo ma viene utilizzato per notificare la corretta esecuzione del compito del task che lo ha creato.
+Inoltre, anche in questa versione viene sfruttato il monitor per la gestione dello stato globale della simulazione.
 
 ### Versione Virtual Thread
-Nella versione implementata tramite i virtual threads di Java, l'architettura scelta è molto simile alla versione multithreaded, ma ciascun thread è associato a un boid, il che consente di sfruttare i vantaggi dei virtual threads, come la leggerezza e la facilità di gestione della concorrenza.
-Nella loro implementazione, i threads sono stati creati analogamente ai thread utilizzati nella prima versione del progetto, 
-utilizzando due barriere per poter gestire la sincronizzazione dei boids per quanto riguarda l'aggiornamento delle loro posizioni e della velocità, dividendo l'esecuzione in una parte di scrittura e una di lettura.
-
+Nella versione implementata tramite i _virtual threads_ di Java, l'architettura scelta è molto simile alla versione multithreaded, ma ciascun thread è associato a un boid, il che consente di sfruttare i vantaggi dei virtual threads, come la leggerezza e la facilità di gestione della concorrenza.
+Nella loro implementazione, i threads sono stati creati analogamente ai thread utilizzati nella prima versione del progetto, utilizzando due barriere per poter gestire la sincronizzazione dei boids per quanto riguarda l'aggiornamento delle loro posizioni e della velocità, dividendo l'esecuzione in una parte di scrittura e una di lettura.
 
 ## Comportamento del sistema
-A description of the behaviour of the system using one or multiple Petri Nets, choosing the proper level of abstraction.
+Il comportamento del sistema è basato principalmente su una classe `State`, la quale mantiene, tramite accessi in mutua esclusione, lo stato della simulazione.
+Il diagramma riportato di seguito è una rete di Petri che rappresenta le interazioni tra le classi principali, nello specifico tra il controller, l'insieme di workers (il cui totale è $n$) e lo stato, rispettivamente in <span style="color:#008a0e">verde</span>, <span style="color:#cc4e00">arancione</span> e nero.
+
+L'elemento di sincronizzazione principale è rappresentato dalle transizioni _await run_, che permettono al controller e ai workers di proseguire la loro esecuzione solamente se lo stato è correttamente impostato, ossia se il token si trova nel luogo etichettato come _running_.
+Nell'immagine, le due transizioni appena descritte sono collegate tramite una linea tratteggiata, non per indicare una dipendenza tra le due (ad esempio non è necessario che il controller attenda l'arrivo dei thread per poter eseguire tale transizione) ma piuttosto che si tratta dello stesso meccanismo di sincronizzazione, utilizzato da entrambi gli agenti.
+<div align="center">
+	<img src="./images/overview.png" alt="Rappresentazione della sincronizzazione tra gli agenti principali." width="500"/>
+</div>
+
+Nel diagramma precedente la parte riguardante l'esecuzione del controller e dei workers è stata semplificata per migliorare la lettura dello schema.
+Di seguito viene riportato più nel dettaglio il processo di sincronizzazione tra i due elementi, il quale avviene principalmente tramite una barriera, chiamata _boids updated_, che indica la fine dell'aggiornamento dei boids presenti nella simulazione, utilizzata dal controller per capire quando è il momento di aggiornare la vista.
+
+Per la sincronizzazione dei boids, ciascuno identificato da un token, viene utilizzata una seconda barriera _read-to-write_ che serve definire temporalmente la parte di lettura (eseguita prima della barriera) e la parte di scrittura (eseguita dopo) descritte nei precedenti capitoli della relazione.
+Tale elemento permette a più threads (o tasks) di accedere alla velocità e alla posizione dei boids evitando corse critiche.
+<div align="center">
+	<img src="./images/focus-on-controller-workers.png" alt="Rappresentazione dettagliata della sincronizzazione tra controller e workers." width="500"/>
+</div>
 
 ## Performance
-Performance tests to analyze and discuss the performance of the programs (for each version) compared to the sequential version.
-Risultati con 16 Core:
-Condizioni Separation - Alignment - Coehsion impostati ad 1
+Di seguito sono riportati i risultati i dati sulla performance raccolti durante l'esecuzione del progetto su un calcolatore da 16 core.
+I pesi relativi a separazione, allineamento e coesione hanno valore 1 e il test considera l'esecuzione di 1000 iterazioni.
 
-_SpeedUp_
-    Sequenziale(42827ms)	100 boid - 1000 iteration
-    Sequenziale(41900ms)	1000 boid - 1000 iteration
-    Sequenziale(520614ms)	5000 boid - 1000 iteration
-    Sequenziale(1204685ms)	10000 boid - 1000 iteration
+### Speedup
+Dati i seguenti tempi d'esecuzione raccolti:
 
-	Multithread(19304ms)	100 boid - 1000 iteration: (sequenziale/multithread)	->42827/19304   = 2,218
-	Multithread(18933ms)	1000 boid - 1000 iteration: (sequenziale/multithread) 	->41900/18933   = 2,213
-	Multithread(44575ms)	5000 boid - 1000 iteration: (sequenziale/multithread) 	->520614/44575  = 11,679
-	Multithread(173762ms)	10000 boid - 1000 iteration: (sequenziale/multithread) 	->1204685/173762= 6,932
+|                 | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Sequenziale     | 42 827ms  | 41 900ms   | 520 614ms  |
+| Multithreaded   | 19 304ms  | 18 933ms   | 76 706ms   |
+| Task-based      | 19 417ms  | 21 634ms   | 37 369ms   |
+| Virtual threads | 19 473ms  | 23 141ms   | 66 864ms   |
 
-	TaskBased(19417ms)	100 boid - 1000 iteration: (sequenziale/taskBased)	    ->42827/19417   = 2,205
-	TaskBased(21634ms)	1000 boid - 1000 iteration: (sequenziale/taskbased) 	->41900/21634   = 1,936
-	TaskBased(35178ms)	5000 boid - 1000 iteration: (sequenziale/taskbased) 	->520614/35178  = 14,799
-    TaskBased(177517ms)	10000 boid - 1000 iteration: (sequenziale/taskbased) 	->1204685/177517= 6,786
+Lo _speedup_ è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'esecuzione della versione sequenziale, mentre $T_n$ il tempo richiesto dall'esecuzione della versione parallela, eseguita su $n$ processori:
 
-	VirtualThread(19473ms)	100 boid - 1000 iteration: (sequenziale/virtualthread)	->42827/19473   = 2,199
-	VirtualThread(18467ms)	1000 boid - 1000 iteration: (sequenziale/virtualthread) ->41900/18467   = 2,268
-	VirtualThread(48804ms)	5000 boid - 1000 iteration: (sequenziale/virtualthread)	->520614/48804  = 10,667
-	VirtualThread(187478ms)	10000 boid - 1000 iteration: (sequenziale/virtualthread)->1204685/187478= 6,425
+|                 | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Multithreaded   | 2,218     | 2,205      | 2,199      |
+| Task-based      | 2,213     | 1,936      | 1,810      |
+| Virtual threads | 6,787     | 13,931     | 7,786      |
 
-_Efficiency_
-E = S/N -> (S = speedup, N = number of processors(16))
 
-	Con 100 boids:
-		Multithread	    : E -> 0,138
-		TaskBased	    : E -> 0,137
-		VirtualThread	: E -> 0,137
+### Efficienza
+Calcolata con la formula $E = \frac{S}{N}$, dove $S$ è lo speedup e $N$ il numero di processori (in questo caso 16).
+L'efficienza ideale è indicata con valore 1, ossia quando tutti i processori sono utilizzati alla loro massima capacità.
 
-	Con 1000 boids:
-		Multithread	    : E -> 0,138
-		TaskBased	    : E -> 0,141
-		VirtualThread	: E -> 0,113
-
-	Con 5000 boids:
-		Multithread	    : E -> 0,729
-		TaskBased	    : E -> 0,924
-		VirtualThread	: E -> 0,666
-
-    Con 10000 boids:
-        Multithread	    : E -> 0,433
-        TaskBased	    : E -> 0,424
-        VirtualThread	: E -> 0,401
-
-Ideal efficiency is 1 = all processors are used at full capacity
+|                 | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Multithreaded   | 0,138     | 0,138      | 0,424      |
+| Task-based      | 0,137     | 0,121      | 0,870      |
+| Virtual threads | 0,137     | 0,113      | 0,486      |
 
 ## Verifica con Java Pathfinder
-Il codice della versione multithreaded è stato testato utilizzando [Java PathFinder (JPF)](https://en.wikipedia.org/wiki/Java_Pathfinder), 
-un framework di verifica formale per programmi Java, utilizzato per l'esplorazione degli stati del programma e la 
-verifica della correttezza del codice, con l'obiettivo di individuare eventuali errori di concorrenza, deadlock o 
-violazioni di proprietà. Per eseguire la verifica, è stato utilizzato un modello semplificato del progetto, al fine di 
-ottimizzare i tempi di esecuzione. In particolare, è stata rimossa la parte relativa all'interfaccia grafica e il numero 
-di boids è stato ridotto per evitare un numero elevato di stati da esplorare. Durante la fase di test, è stato 
-analizzato un solo ciclo di simulazione, in modo da concentrarsi sulla verifica della logica di aggiornamento dei boids 
-e sulla gestione della concorrenza di questi ultimi tramite gli elementi di sincronizzazione implementati nel codice, 
-come le barriere e i monitor.
+Il codice della versione multithreaded è stato testato utilizzando [Java PathFinder (JPF)](https://en.wikipedia.org/wiki/Java_Pathfinder), un framework di verifica formale per programmi Java, utilizzato per l'esplorazione degli stati del programma e la verifica della correttezza del codice, con l'obiettivo di individuare eventuali errori di concorrenza, deadlock o violazioni di proprietà.
+Per eseguire la verifica, è stato utilizzato un modello semplificato del progetto, al fine di ottimizzare i tempi di esecuzione. In particolare, è stata rimossa la parte relativa all'interfaccia grafica e il numero di boids è stato ridotto per evitare un numero elevato di stati da esplorare. Durante la fase di test, è stato
+analizzato un solo ciclo di simulazione, in modo da concentrarsi sulla verifica della logica di aggiornamento dei boids e sulla gestione della concorrenza di questi ultimi tramite gli elementi di sincronizzazione implementati nel codice, come le barriere e i monitor.
 
 Di seguito viene riportato il risultato della verifica, eseguita su un sistema con 10 core:
 <pre>
@@ -175,6 +154,6 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 See <a href="https://docs.gradle.org/7.4/userguide/command_line_interface.html#sec:command_line_warnings">https://docs.gradle.org/7.4/userguide/command_line_interface.html#sec:command_line_warnings</a>
 
-<span style="color:green">BUILD SUCCESSFUL</span> in 3m 31s
+<span style="color:green"><b>BUILD SUCCESSFUL</b></span> in 3m 31s
 2 actionable tasks: 2 executed
 </pre>

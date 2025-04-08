@@ -41,7 +41,7 @@ public class BoidWorker extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             this.controller.awaitRun();
             for (Boid boid : this.boids) {
                 boid.calculateVelocity(model);
