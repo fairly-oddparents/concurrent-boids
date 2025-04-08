@@ -68,7 +68,7 @@ Il diagramma riportato di seguito è una rete di Petri che rappresenta le intera
 L'elemento di sincronizzazione principale è rappresentato dalle transizioni _await run_, che permettono al controller e ai workers di proseguire la loro esecuzione solamente se lo stato è correttamente impostato, ossia se il token si trova nel luogo etichettato come _running_.
 Nell'immagine, le due transizioni appena descritte sono collegate tramite una linea tratteggiata, non per indicare una dipendenza tra le due (ad esempio non è necessario che il controller attenda l'arrivo dei thread per poter eseguire tale transizione) ma piuttosto che si tratta dello stesso meccanismo di sincronizzazione, utilizzato da entrambi gli agenti.
 <div align="center">
-	<img src="./images/overview.png" alt="Diagram representing an overview of the synchronization of the main elements" width="500"/>
+	<img src="./images/overview.png" alt="Rappresentazione della sincronizzazione tra gli agenti principali." width="500"/>
 </div>
 
 Nel diagramma precedente la parte riguardante l'esecuzione del controller e dei workers è stata semplificata per migliorare la lettura dello schema.
@@ -77,7 +77,7 @@ Di seguito viene riportato più nel dettaglio il processo di sincronizzazione tr
 Per la sincronizzazione dei boids, ciascuno identificato da un token, viene utilizzata una seconda barriera _read-to-write_ che serve definire temporalmente la parte di lettura (eseguita prima della barriera) e la parte di scrittura (eseguita dopo) descritte nei precedenti capitoli della relazione.
 Tale elemento permette a più threads (o tasks) di accedere alla velocità e alla posizione dei boids evitando corse critiche.
 <div align="center">
-	<img src="./images/focus-on-controller-workers.png" alt="Diagram representing in detail the synchronization between controller and workers" width="500"/>
+	<img src="./images/focus-on-controller-workers.png" alt="Rappresentazione dettagliata della sincronizzazione tra controller e workers." width="500"/>
 </div>
 
 ## Performance
