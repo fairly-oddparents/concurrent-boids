@@ -86,6 +86,7 @@ I pesi relativi a separazione, allineamento e coesione hanno valore 1 e il test 
 
 ### Speedup
 Dati i seguenti tempi d'esecuzione raccolti:
+
 |               |  100 boids |  1000 boids |  5000 boids |
 |---------------|------------|-------------|-------------|
 |Sequenziale    |  42 827ms  |   41 900ms  |  520 614ms  |
@@ -94,6 +95,7 @@ Dati i seguenti tempi d'esecuzione raccolti:
 |Virtual threads|  19 473ms  |   23 141ms  |   66 864ms  |
 
 Lo _speedup_ è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'esecuzione della versione sequenziale, mentre $T_n$ il tempo richiesto dall'esecuzione della versione parallela, eseguita su $n$ processori:
+
 |               | 100 boids | 1000 boids | 5000 boids |
 |---------------|-----------|------------|------------|
 |Multithreaded  |   2,218   |    2,205   |   2,199    |
@@ -104,6 +106,7 @@ Lo _speedup_ è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'e
 ### Efficienza
 Calcolata con la formula $E = \frac{S}{N}$, dove $S$ è lo speedup e $N$ il numero di processori (in questo caso 16).
 L'efficienza ideale è indicata con valore 1, ossia quando tutti i processori sono utilizzati alla loro massima capacità.
+
 |               | 100 boids | 1000 boids | 5000 boids |
 |---------------|-----------|------------|------------|
 |Multithreaded  |   0,138   |    0,138   |    0,424   |
