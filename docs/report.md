@@ -81,37 +81,55 @@ Tale elemento permette a più threads (o tasks) di accedere alla velocità e all
 </div>
 
 ## Performance
-Di seguito sono riportati i risultati i dati sulla performance raccolti durante l'esecuzione del progetto su un calcolatore da 16 core.
+Di seguito sono riportati i risultati i dati sulla performance raccolti durante l'esecuzione del progetto su due tipi di calcolatori con differenti numeri di core.
 I pesi relativi a separazione, allineamento e coesione hanno valore 1 e il test considera l'esecuzione di 1000 iterazioni.
 
 ### Speedup
 Dati i seguenti tempi d'esecuzione raccolti:
 
-|                 | 100 boids | 1000 boids | 5000 boids |
+|  16 - core      | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
-| Sequenziale     | 42 827ms  | 41 900ms   | 520 614ms  |
-| Multithreaded   | 19 304ms  | 18 933ms   | 76 706ms   |
-| Task-based      | 19 417ms  | 21 634ms   | 37 369ms   |
-| Virtual threads | 19 473ms  | 23 141ms   | 66 864ms   |
+| Sequenziale     | 42 827ms  | 41 900ms   | 404 053ms  |
+| Multithreaded   | 19 304ms  | 18 933ms   | 46 841ms   |
+| Task-based      | 19 417ms  | 21 634ms   | 35 782ms   |
+| Virtual threads | 19 473ms  | 18 527ms   | 54 460ms   |
+
+|  4 - core       | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Sequenziale     | 43 382ms  | 41 379ms   | 330 854ms  |
+| Multithreaded   | 18 000ms  | 19 087ms   | 113 454ms  |
+| Task-based      | 18 854ms  | 22 113ms   | 115 848ms  |
+| Virtual threads | 18 902ms  | 18 667ms   | 141 614ms  |
 
 Lo _speedup_ è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'esecuzione della versione sequenziale, mentre $T_n$ il tempo richiesto dall'esecuzione della versione parallela, eseguita su $n$ processori:
 
-|                 | 100 boids | 1000 boids | 5000 boids |
+|  16 - core      | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
-| Multithreaded   | 2,218     | 2,205      | 2,199      |
-| Task-based      | 2,213     | 1,936      | 1,810      |
-| Virtual threads | 6,787     | 13,931     | 7,786      |
+| Multithreaded   | 2,218     | 2,205      | 8,626      |
+| Task-based      | 2,213     | 1,936      | 11,292     |
+| Virtual threads | 2,299     | 2,261      | 7,419      |
 
+|  4 - core       | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Multithreaded   | 2,410     | 2,167      | 2,916      |
+| Task-based      | 2,300     | 1,871      | 2,855      |
+| Virtual threads | 2,295     | 2,216      | 2,336      |
 
 ### Efficienza
-Calcolata con la formula $E = \frac{S}{N}$, dove $S$ è lo speedup e $N$ il numero di processori (in questo caso 16).
+Calcolata con la formula $E = \frac{S}{N}$, dove $S$ è lo speedup e $N$ il numero di processori.
 L'efficienza ideale è indicata con valore 1, ossia quando tutti i processori sono utilizzati alla loro massima capacità.
 
-|                 | 100 boids | 1000 boids | 5000 boids |
+|  16 - core      | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
-| Multithreaded   | 0,138     | 0,138      | 0,424      |
-| Task-based      | 0,137     | 0,121      | 0,870      |
-| Virtual threads | 0,137     | 0,113      | 0,486      |
+| Multithreaded   | 0,138     | 0,137      | 0,539      |
+| Task-based      | 0,138     | 0,121      | 0,705      |
+| Virtual threads | 0,163     | 0,141      | 0,463      |
+
+|  4 - core       | 100 boids | 1000 boids | 5000 boids |
+|-----------------|-----------|------------|------------|
+| Multithreaded   | 0,602     | 0,541      | 0,729      |
+| Task-based      | 0,575     | 0,467      | 0,713      |
+| Virtual threads | 0,573     | 0,554      | 0,584      |
 
 ## Verifica con Java Pathfinder
 Il codice della versione multithreaded è stato testato utilizzando [Java PathFinder (JPF)](https://en.wikipedia.org/wiki/Java_Pathfinder), un framework di verifica formale per programmi Java, utilizzato per l'esplorazione degli stati del programma e la verifica della correttezza del codice, con l'obiettivo di individuare eventuali errori di concorrenza, deadlock o violazioni di proprietà.
