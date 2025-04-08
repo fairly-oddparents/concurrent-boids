@@ -66,6 +66,7 @@ Il comportamento del sistema è basato principalmente su una classe `State`, la 
 Il diagramma riportato di seguito è una rete di Petri che rappresenta le interazioni tra le classi principali, nello specifico tra il controller, l'insieme di workers (il cui totale è $n$) e lo stato, rispettivamente in verde, arancione e blu.
 
 L'elemento di sincronizzazione principale è rappresentato dalle transizioni _await run_, che permettono al controller e ai workers di proseguire la loro esecuzione solamente se lo stato è correttamente impostato, ossia se il token si trova nel luogo etichettato come _running_.
+Nell'immagine, le due transizioni appena descritte sono collegate tramite una linea tratteggiata, non per indicare una dipendenza tra le due (ad esempio non è necessario che il controller attenda l'arrivo dei thread per poter eseguire tale transizione) ma piuttosto che si tratta dello stesso meccanismo di sincronizzazione, utilizzato da entrambi gli agenti.
 <div align="center">
 	<img src="./images/overview.png" alt="Diagram representing an overview of the synchronization of the main elements" width="500"/>
 </div>
