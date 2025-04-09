@@ -83,19 +83,19 @@ Tale elemento permette a più workers di accedere alla velocità e alla posizion
 
 ## Performance
 Di seguito sono riportati i risultati i dati sulla performance raccolti durante l'esecuzione del progetto su due tipi di calcolatori con differenti numeri di core.
-I pesi relativi a separazione, allineamento e coesione hanno valore 1 e il test considera l'esecuzione di 1000 iterazioni.
+I pesi relativi a separazione, allineamento e coesione hanno valore 1 e i test considerano l'esecuzione di 1000 iterazioni, su una macchina a 10 core (con 16 processori logici) e su una a 2 core (con 4 processori logici).
 
 ### Speedup
 Dati i seguenti tempi d'esecuzione raccolti:
 
-|  16 - core      | 100 boids | 1000 boids | 5000 boids |
+| 10 core         | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
 | Sequenziale     | 42 827ms  | 41 900ms   | 404 053ms  |
 | Multithreaded   | 19 304ms  | 18 933ms   | 46 841ms   |
 | Task-based      | 19 417ms  | 21 634ms   | 35 782ms   |
 | Virtual threads | 19 473ms  | 18 527ms   | 54 460ms   |
 
-|  4 - core       | 100 boids | 1000 boids | 5000 boids |
+| 2 core          | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
 | Sequenziale     | 43 382ms  | 41 379ms   | 330 854ms  |
 | Multithreaded   | 18 000ms  | 19 087ms   | 113 454ms  |
@@ -104,13 +104,13 @@ Dati i seguenti tempi d'esecuzione raccolti:
 
 Lo speedup è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'esecuzione della versione sequenziale, mentre $T_n$ il tempo richiesto dall'esecuzione della versione parallela, eseguita su $n$ processori:
 
-|  16 - core      | 100 boids | 1000 boids | 5000 boids |
+| 10 core         | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
 | Multithreaded   | 2,218     | 2,205      | 8,626      |
 | Task-based      | 2,213     | 1,936      | 11,292     |
 | Virtual threads | 2,299     | 2,261      | 7,419      |
 
-|  4 - core       | 100 boids | 1000 boids | 5000 boids |
+| 2 core          | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
 | Multithreaded   | 2,410     | 2,167      | 2,916      |
 | Task-based      | 2,300     | 1,871      | 2,855      |
@@ -120,13 +120,13 @@ Lo speedup è calcolato come $S = \frac{T_1}{T_n}$, dove $T_1$ è il tempo d'ese
 Calcolata con la formula $E = \frac{S}{N}$, dove $S$ è lo speedup e $N$ il numero di processori.
 L'efficienza ideale è indicata con valore 1, ossia quando tutti i processori sono utilizzati alla loro massima capacità.
 
-|  16 - core      | 100 boids | 1000 boids | 5000 boids |
+| 10 core         | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
 | Multithreaded   | 0,138     | 0,137      | 0,539      |
 | Task-based      | 0,138     | 0,121      | 0,705      |
 | Virtual threads | 0,163     | 0,141      | 0,463      |
 
-|  4 - core       | 100 boids | 1000 boids | 5000 boids |
+| 2 core          | 100 boids | 1000 boids | 5000 boids |
 |-----------------|-----------|------------|------------|
 | Multithreaded   | 0,602     | 0,541      | 0,729      |
 | Task-based      | 0,575     | 0,467      | 0,713      |
