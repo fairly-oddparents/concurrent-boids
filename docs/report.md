@@ -82,8 +82,8 @@ Tale elemento permette a più workers di accedere alla velocità e alla posizion
 </div>
 
 ## Performance
-Di seguito sono riportati i risultati i dati sulla performance raccolti durante l'esecuzione del progetto su due tipi di calcolatori con differenti numeri di core.
-I pesi relativi a separazione, allineamento e coesione hanno valore 1 e i test considerano l'esecuzione di 1000 iterazioni, su una macchina a 10 core (con 16 processori logici) e su una a 2 core (con 4 processori logici).
+Di seguito sono riportati i risultati i dati sulla performance raccolti durante l'esecuzione (di 1000 iterazioni) del progetto su due tipi di calcolatori: uno a 10 core (con 16 processori logici) e uno a 2 core (con 4 processori logici).
+I pesi relativi a separazione, allineamento e coesione sono stati considerati a valore 1.
 
 ### Speedup
 Dati i seguenti tempi d'esecuzione raccolti:
