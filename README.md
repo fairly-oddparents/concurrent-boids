@@ -1,4 +1,4 @@
-# Concurrent Boids
+# Concurrent Boids 🐦‍⬛
 ![Demo](doc/images/demo.gif)
 
 The repository contains the first assignment of the [Concurrent and Distributed Programming course](https://www.unibo.it/en/study/course-units-transferable-skills-moocs/course-unit-catalogue/course-unit/2024/412598) (Master's Degree in CSE @ Unibo). The project involves designing and developing a concurrent version of the original [boids simulation](https://en.wikipedia.org/wiki/Boids), as conceived by Craig Reynolds in 1986. The repository includes three distinct versions of the project, each designed and developed using a different approach:
