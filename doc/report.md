@@ -36,7 +36,7 @@ Il progetto è stato strutturato seguendo il pattern MVC (Model-View-Controller)
 Tale approccio ha consentito di gestire in modo modulare e flessibile le diverse versioni concorrenti della simulazione. Nello specifico:
 - **Model** (`BoidsModel`): contiene la logica della simulazione dei _boids_, ne gestisce il mantenimento e l'aggiornamento della posizione e della velocità, secondo le regole di comportamento indicate nel progetto di Reynolds (separazione, coesione, allineamento);
 - **View** (`BoidsPanel`, `BoidsView`): implementata utilizzando Swing, è responsabile della rappresentazione grafica dei boids e dell'interazione tra l'utente e il programma. Fornisce dei pulsanti per gestire l'esecuzione della simulazione (start, stop e pause/resume) e l'aggiornamento delle regole di movimento di ciascun elemento, tramite _sliders_.
-- **Controller** (`BoidsController`): gestisce il ciclo di vita della simulazione e funge da ponte tra la vista e il modello,
+- **Controller** (`BoidsController`): gestisce il ciclo di vita della simulazione e funge da ponte tra la vista e il modello.
 
 ### Versione Multithread
 In questa versione, ogni boid è stato inizialmente associato a un thread dedicato. Tuttavia, questa soluzione è stata ritenuta troppo onerosa, in quanto limitata al numero di core della CPU utilizzata, e si è passati a una suddivisione dell'insieme di boids tra un sottoinsieme di thread, uno per ciascun processore disponibile sulla Java Virtual Machine (JVM).
